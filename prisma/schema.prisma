@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  // Explicit .ts import specifiers let Node run scripts that use the client directly.
+  importFileExtension = "ts"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Single row holding the event details. Edited only from the admin panel.
+model Event {
+  id                String   @id @default(uuid()) @db.Uuid
+  babyName          String
+  /// Stored in UTC; displayed in America/Argentina/Buenos_Aires.
+  startsAt          DateTime @db.Timestamptz(3)
+  venueName         String?
+  streetAddress     String
+  city              String
+  mapsUrl           String?
+  latitude          Decimal? @db.Decimal(9, 6)
+  longitude         Decimal? @db.Decimal(9, 6)
+  paymentAlias      String?
+  paymentCbu        String?
+  paymentHolderName String
+  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @db.Timestamptz(3)
+}
+
+enum RsvpStatus {
+  PENDING
+  ATTENDING
+  NOT_ATTENDING
+}
+
+enum SentVia {
+  WHATSAPP
+  EMAIL
+}
+
+model Invitation {
+  id                  String         @id @default(uuid()) @db.Uuid
+  /// Random token (>= 128 bits, CSPRNG) used in the private /i/[token] link.
+  token               String         @unique
+  /// 1 to 5 names; also enforced by a CHECK constraint in the migration.
+  guestNames          String[]
+  rsvpStatus          RsvpStatus     @default(PENDING)
+  rsvpAttendeesCount  Int?
+  rsvpUpdatedAt       DateTime?      @db.Timestamptz(3)
+  sentVia             SentVia?
+  createdAt           DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt           DateTime       @updatedAt @db.Timestamptz(3)
+  claims              GiftClaim[]
+  contributions       Contribution[]
+}
+
+model Gift {
+  id                  String         @id @default(uuid()) @db.Uuid
+  title               String
+  imageUrl            String
+  productUrl          String
+  /// Unit reference price in cents (ARS).
+  referencePriceCents Int
+  /// How many units the parents accept (>= 1).
+  quantity            Int
+  sortOrder           Int            @default(0)
+  /// Soft delete: archived gifts are hidden but keep their history.
+  archivedAt          DateTime?      @db.Timestamptz(3)
+  createdAt           DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt           DateTime       @updatedAt @db.Timestamptz(3)
+  claims              GiftClaim[]
+  contributions       Contribution[]
+
+  @@index([archivedAt, sortOrder])
+}
+
+/// "Yo lo llevo": a guest reserves units of a gift.
+model GiftClaim {
+  id             String     @id @default(uuid()) @db.Uuid
+  giftId         String     @db.Uuid
+  invitationId   String     @db.Uuid
+  units          Int
+  /// Client-generated key that makes retries and double clicks idempotent.
+  idempotencyKey String     @unique
+  createdAt      DateTime   @default(now()) @db.Timestamptz(3)
+  gift           Gift       @relation(fields: [giftId], references: [id], onDelete: Restrict)
+  invitation     Invitation @relation(fields: [invitationId], references: [id], onDelete: Restrict)
+
+  @@index([giftId])
+  @@index([invitationId])
+}
+
+enum ContributionStatus {
+  DECLARED
+  CONFIRMED
+  VOIDED
+}
+
+/// Money a guest declares having transferred (no payment gateway).
+model Contribution {
+  id             String             @id @default(uuid()) @db.Uuid
+  giftId         String             @db.Uuid
+  invitationId   String             @db.Uuid
+  amountCents    Int
+  status         ContributionStatus @default(DECLARED)
+  /// Client-generated key that makes retries and double clicks idempotent.
+  idempotencyKey String             @unique
+  createdAt      DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime           @updatedAt @db.Timestamptz(3)
+  gift           Gift               @relation(fields: [giftId], references: [id], onDelete: Restrict)
+  invitation     Invitation         @relation(fields: [invitationId], references: [id], onDelete: Restrict)
+
+  @@index([giftId])
+  @@index([invitationId])
+}
+
+/// Shared account for the parents' admin panel.
+model AdminUser {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+}
+
+/// Fixed-window counter used for rate limiting (login, RSVP, claims, etc.).
+model RateLimitBucket {
+  key         String   @id
+  windowStart DateTime @db.Timestamptz(3)
+  count       Int
+}

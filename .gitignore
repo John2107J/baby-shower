@@ -37,3 +37,4 @@ next-env.d.ts
 
 # Local seeds with real data (never commit)
 prisma/seed.local.*
+src/generated/
