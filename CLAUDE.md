@@ -236,12 +236,12 @@ Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grup
 3. **Aportes sin confirmar:** ¿cuentan para la barra de progreso apenas el invitado los declara, o solo cuando los padres los confirman?
 4. **Si ya se completó un regalo:** ¿se oculta, queda visible como "completo", o se muestra al final?
 5. **RSVP:** ¿máximo de asistentes = cantidad de nombres de la invitación? ¿Hasta qué fecha se puede modificar la respuesta?
-6. **Panel de padres:** ¿cuántas cuentas (una o dos, una por cada padre)? ¿Cómo se crean y se recuperan las contraseñas?
+6. ~~**Panel de padres:**~~ → **Resuelto** (ver sección 12).
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
 8. **Dominio:** ¿se usará dominio propio o el de Vercel?
 9. **Diseño:** estilo visual, paleta de colores, tipografías, y foto/ilustración para la invitación. *No inventar: pedir referencias.*
 10. **Textos de la invitación** (saludo, fórmulas, mensajes de WhatsApp y Gmail): los redacta el dueño o se proponen para su aprobación.
-11. **Hash de contraseñas** (argon2id vs bcrypt) y estrategia de **rate limiting** (¿servicio externo o en base de datos?).
+11. ~~**Hash de contraseñas** y **rate limiting**~~ → **Resuelto** (ver sección 12).
 12. **Datos reales** del evento: nombre de la bebé, fecha, hora, dirección, alias/CBU. Pedirlos; no usar datos inventados fuera de entornos de prueba claramente marcados.
 
 ---
@@ -281,7 +281,16 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 4 | Tests | **Vitest**. |
 | 5 | CI | **GitHub Actions**: lint + typecheck + tests. Sin secretos en logs; permisos mínimos (`contents: read`). No despliega (eso lo hace Vercel). |
 | 6 | Flujo Git | `main` creada con un commit inicial (autorizado por el dueño). El resto entra por rama de trabajo + Pull Request. Claude opera GitHub informando cada acción (crear rama, commit, push, PR). |
-| 7 | Node | Versión a confirmar por el dueño (`node -v` en su máquina); se fija en `.nvmrc` y `engines`. |
+| 7 | Node | **Node 24** (el dueño usa 24.14.0); fijado en `.nvmrc`, `engines` y CI. |
+| 9 | Gestor de paquetes / TypeScript / ESLint | **npm**; **TypeScript 5.9** (no 7.x hasta que el ecosistema lo soporte); **ESLint 9** hasta que `eslint-config-next` soporte la 10. |
+| 10 | `npm audit` | Las vulnerabilidades de la cadena de lint (`braces`, solo desarrollo) se aceptan y se revisan en la Fase 7. |
+| 11 | Panel de padres | **Una cuenta compartida.** Alta y reseteo de contraseña con `npm run admin:set-password` (sin registro público ni emails). |
+| 12 | Contraseñas | **argon2id** (`@node-rs/argon2`, parámetros OWASP). Mínimo 12 caracteres. |
+| 13 | Rate limiting | **En la base (Neon)**, ventana fija con UPSERT atómico; claves guardadas como hash SHA-256. Login: **5 intentos / 15 min por IP y por email**. |
+| 14 | Sesión del panel | **Auth.js v5 (beta, versión fija)**, sesión JWT de **8 horas**, cookie HttpOnly/SameSite=Lax (Secure en producción). |
+| 15 | Conexión a la base | **Prisma 7 + `@prisma/adapter-pg`** (funciona igual con Neon y con el Postgres del CI). |
+| 16 | Token de invitación | Se guarda **tal cual** en la base (solo accesible desde el servidor) para que el panel pueda volver a mostrar y copiar los links. |
+| 17 | Modelo de datos | Aprobado: incluye `venueName`, borrado lógico de regalos (`archivedAt`), montos en centavos `Int`, claves de idempotencia en reservas/aportes y restricciones CHECK en la base. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

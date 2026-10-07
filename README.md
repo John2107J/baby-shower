@@ -22,6 +22,7 @@ Este repositorio es **público**. Nunca se commitean secretos, archivos `.env` n
 ```bash
 npm ci
 cp .env.example .env.local   # completar valores locales (nunca commitear)
+npm run db:migrate           # aplica las migraciones a la base local
 npm run dev                  # http://localhost:3000
 ```
 
@@ -39,4 +40,9 @@ npm run dev                  # http://localhost:3000
 
 ## CI
 
-GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cada Pull Request: lint, typecheck, formato, tests y build. Tiene permisos de solo lectura y no usa secretos.
+GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cada Pull Request: lint, typecheck, formato, tests unitarios, tests de integración (contra un Postgres descartable creado solo para el job) y build. Tiene permisos de solo lectura y no usa secretos.
+
+## Panel de los papás
+
+- Una cuenta compartida. Se crea o se resetea la contraseña con `npm run admin:set-password -- <email>` (la contraseña se escribe oculta, mínimo 12 caracteres). No hay registro público ni recuperación por email.
+- Login en `/admin/login`. Sesión de 8 horas. Bloqueo de 15 minutos tras 5 intentos fallidos (por IP y por email).

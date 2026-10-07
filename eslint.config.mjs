@@ -18,6 +18,7 @@ export default defineConfig([
     rules: { "no-console": "off" },
   },
   globalIgnores([
+    "src/generated/**",
     ".next/**",
     "out/**",
     "build/**",
