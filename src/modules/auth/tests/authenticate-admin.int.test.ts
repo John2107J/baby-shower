@@ -69,22 +69,10 @@ describe("authenticateAdmin", () => {
     });
   });
 
-  it("locks the email after too many failures, even with the right password", async () => {
-    for (let i = 0; i < LOGIN_RATE_LIMIT.limit; i++)
-      await login(EMAIL, "wrong");
-    expect(await login(EMAIL, PASSWORD)).toEqual({
-      ok: false,
-      reason: "rate_limited",
-    });
-  });
-
-  it("locks the email even when attempts come from different IPs", async () => {
-    for (let i = 0; i < LOGIN_RATE_LIMIT.limit; i++)
-      await login(EMAIL, "wrong", `198.51.100.${i}`);
-    expect(await login(EMAIL, PASSWORD, "192.0.2.99")).toEqual({
-      ok: false,
-      reason: "rate_limited",
-    });
+  it("never locks the parents out by email: the right password from another connection still works", async () => {
+    for (let i = 0; i < LOGIN_RATE_LIMIT.limit * 2; i++)
+      await login(EMAIL, "wrong", `198.51.100.${i % LOGIN_RATE_LIMIT.limit}`);
+    expect((await login(EMAIL, PASSWORD, "192.0.2.99")).ok).toBe(true);
   });
 
   it("locks the IP after too many failures across different emails", async () => {
@@ -96,7 +84,16 @@ describe("authenticateAdmin", () => {
     });
   });
 
-  it("resets the counters after a successful login", async () => {
+  it("blocks the guessing connection even with the right password", async () => {
+    for (let i = 0; i < LOGIN_RATE_LIMIT.limit; i++)
+      await login(EMAIL, "wrong");
+    expect(await login(EMAIL, PASSWORD)).toEqual({
+      ok: false,
+      reason: "rate_limited",
+    });
+  });
+
+  it("resets the counter after a successful login", async () => {
     for (let i = 0; i < LOGIN_RATE_LIMIT.limit - 1; i++)
       await login(EMAIL, "wrong");
     expect((await login(EMAIL, PASSWORD)).ok).toBe(true);

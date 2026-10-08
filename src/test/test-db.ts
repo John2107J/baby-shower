@@ -13,6 +13,7 @@ const TABLES = [
   "Gift",
   "Invitation",
   "Event",
+  "AdminRecoveryCode",
   "AdminUser",
   "RateLimitBucket",
 ] as const;

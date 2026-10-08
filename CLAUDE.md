@@ -284,9 +284,9 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 7 | Node | **Node 24** (el dueño usa 24.14.0); fijado en `.nvmrc`, `engines` y CI. |
 | 9 | Gestor de paquetes / TypeScript / ESLint | **npm**; **TypeScript 5.9** (no 7.x hasta que el ecosistema lo soporte); **ESLint 9** hasta que `eslint-config-next` soporte la 10. |
 | 10 | `npm audit` | *(Revisada en la Fase 7)* Se aceptan las vulnerabilidades de la cadena de lint (`braces`) y del CLI de Prisma (`mysql2`, `deepmerge-ts`): no llegan al código publicado. Detalle en `docs/seguridad.md`. Se vuelve a revisar antes de enviar las invitaciones. |
-| 11 | Panel de padres | **Una cuenta compartida.** Alta y reseteo de contraseña con `npm run admin:set-password` (sin registro público ni emails). |
+| 11 | Panel de padres | *(Actualizada en la Fase 7c)* **Una cuenta compartida** para papá y mamá, para **un solo evento** (opción A). Alta en `/admin/crear-cuenta` con `ADMIN_SETUP_CODE`, solo mientras no haya cuenta. Recuperación con **8 códigos de un solo uso, sin emails**. `npm run admin:set-password` queda como último recurso. |
 | 12 | Contraseñas | **argon2id** (`@node-rs/argon2`, parámetros OWASP). Mínimo 12 caracteres. |
-| 13 | Rate limiting | **En la base (Neon)**, ventana fija con UPSERT atómico; claves guardadas como hash SHA-256. Login: **5 intentos / 15 min por IP y por email**. |
+| 13 | Rate limiting | **En la base (Neon)**, ventana fija con UPSERT atómico; claves guardadas como hash SHA-256. Login: **5 intentos / 15 min por IP** *(Fase 7c: ya no se bloquea por email, para que nadie pueda dejar afuera a los padres)*. Crear cuenta y recuperar: igual, por IP. |
 | 14 | Sesión del panel | **Auth.js v5 (beta, versión fija)**, sesión JWT de **8 horas**, cookie HttpOnly/SameSite=Lax (Secure en producción). |
 | 15 | Conexión a la base | **Prisma 7 + `@prisma/adapter-pg`** (funciona igual con Neon y con el Postgres del CI). |
 | 16 | Token de invitación | Se guarda **tal cual** en la base (solo accesible desde el servidor) para que el panel pueda volver a mostrar y copiar los links. |
@@ -340,6 +340,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 64 | Sesiones del panel | Cambiar la contraseña cierra todas las sesiones abiertas (`AdminUser.sessionVersion`). |
 | 65 | Tabla de límites | Se limpia sola (registros de más de un día). |
 | 66 | Riesgos aceptados (Fase 7) | Metadatos de fotos, montos deducibles, optimizador con cualquier Blob, IP confiable solo en Vercel. Detalle en `docs/seguridad.md`. |
+| 67 | Varios eventos (a futuro) | **No ahora.** Después de este evento, evaluar llevar el sitio a varios baby showers (cada cuenta con sus eventos). Implica cambiar modelo de datos, permisos, links y privacidad entre eventos: se planifica como un proyecto aparte. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

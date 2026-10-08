@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: ADMIN_ROUTES.invitations, label: "Invitaciones" },
   { href: ADMIN_ROUTES.confirmations, label: "Confirmaciones" },
   { href: ADMIN_ROUTES.contributions, label: "Aportes" },
+  { href: ADMIN_ROUTES.account, label: "Cuenta" },
 ] as const;
 
 export function AdminNav() {

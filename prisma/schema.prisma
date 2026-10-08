@@ -1,6 +1,6 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
   // Explicit .ts import specifiers let Node run scripts that use the client directly.
   importFileExtension = "ts"
 }
@@ -40,19 +40,19 @@ enum SentVia {
 }
 
 model Invitation {
-  id                  String         @id @default(uuid()) @db.Uuid
+  id                 String         @id @default(uuid()) @db.Uuid
   /// Random token (>= 128 bits, CSPRNG) used in the private /i/[token] link.
-  token               String         @unique
+  token              String         @unique
   /// 1 to 5 names; also enforced by a CHECK constraint in the migration.
-  guestNames          String[]
-  rsvpStatus          RsvpStatus     @default(PENDING)
-  rsvpAttendeesCount  Int?
-  rsvpUpdatedAt       DateTime?      @db.Timestamptz(3)
-  sentVia             SentVia?
-  createdAt           DateTime       @default(now()) @db.Timestamptz(3)
-  updatedAt           DateTime       @updatedAt @db.Timestamptz(3)
-  claims              GiftClaim[]
-  contributions       Contribution[]
+  guestNames         String[]
+  rsvpStatus         RsvpStatus     @default(PENDING)
+  rsvpAttendeesCount Int?
+  rsvpUpdatedAt      DateTime?      @db.Timestamptz(3)
+  sentVia            SentVia?
+  createdAt          DateTime       @default(now()) @db.Timestamptz(3)
+  updatedAt          DateTime       @updatedAt @db.Timestamptz(3)
+  claims             GiftClaim[]
+  contributions      Contribution[]
 }
 
 model Gift {
@@ -119,13 +119,26 @@ model Contribution {
 
 /// Shared account for the parents' admin panel.
 model AdminUser {
-  id           String   @id @default(uuid()) @db.Uuid
-  email        String   @unique
-  passwordHash String
+  id             String              @id @default(uuid()) @db.Uuid
+  email          String              @unique
+  passwordHash   String
   /// Increases on every password change; sessions opened with an older value stop working.
-  sessionVersion Int    @default(0)
-  createdAt    DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+  sessionVersion Int                 @default(0)
+  createdAt      DateTime            @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime            @updatedAt @db.Timestamptz(3)
+  recoveryCodes  AdminRecoveryCode[]
+}
+
+/// One-time codes to set a new password without email (phase 7c). Only hashes are stored.
+model AdminRecoveryCode {
+  id          String    @id @default(uuid()) @db.Uuid
+  adminUserId String    @db.Uuid
+  codeHash    String
+  usedAt      DateTime? @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @db.Timestamptz(3)
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId])
 }
 
 /// Fixed-window counter used for rate limiting (login, RSVP, claims, etc.).

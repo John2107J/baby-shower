@@ -11,10 +11,8 @@ import { createInterface, type Interface } from "node:readline";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client.ts";
 import { upsertAdminUserPassword } from "../src/modules/auth/repositories/admin-user-repository.ts";
-import {
-  MIN_PASSWORD_LENGTH,
-  hashPassword,
-} from "../src/modules/auth/services/password.ts";
+import { MIN_PASSWORD_LENGTH } from "../src/modules/auth/domain/password-rules.ts";
+import { hashPassword } from "../src/modules/auth/services/password.ts";
 import { normalizeEmail } from "../src/modules/auth/schemas/credentials.ts";
 
 const LOCAL_ENV_FILE = ".env.local";
