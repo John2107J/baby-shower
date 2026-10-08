@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { connection } from "next/server";
 import type { ReactNode } from "react";
 import "./globals.css";
 
@@ -13,9 +14,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
+  // Every page is rendered per request so it can carry that request's CSP
+  // nonce; a page built ahead of time would have its scripts blocked.
+  await connection();
   return (
     <html lang="es-AR">
       <body>{children}</body>

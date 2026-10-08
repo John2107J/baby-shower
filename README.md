@@ -12,6 +12,8 @@ Next.js (App Router) + TypeScript · Tailwind CSS · PostgreSQL (Neon) + Prisma 
 
 Este repositorio es **público**. Nunca se commitean secretos, archivos `.env` ni datos reales de invitados o del evento.
 
+Cabeceras, CSP con nonce y estado de `npm audit`: ver [`docs/seguridad.md`](docs/seguridad.md).
+
 ## Requisitos
 
 - Node.js 24 (ver `.nvmrc`)
