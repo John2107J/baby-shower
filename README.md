@@ -46,10 +46,13 @@ GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cad
 
 - `/i/<token>`: invitación personal con confirmación de asistencia (1 a 6 personas), editable hasta las 23:59 del día anterior al evento.
 - Un link inválido o una IP bloqueada ven la misma página "no encontrada".
+- Vista previa en WhatsApp: imagen con el moño y el nombre de la bebé (`/i/<token>/opengraph-image`), sin datos de invitados.
+- `/` muestra un mensaje neutro para quien entra sin link.
 
 ## Panel de los papás
 
 - `/admin/evento`: datos del evento. `/admin/regalos`: lista de regalos con foto, link de la tienda, precio y cantidad.
+- `/admin/confirmaciones`: cuántas personas vienen, cuántas invitaciones no vienen y cuántas faltan responder, con la lista (pendientes primero).
 - `/admin/invitaciones`: invitaciones de 1 a 5 nombres con su link personal (`/i/<token>`, 256 bits), copiar link, editar nombres, regenerar link y borrar (solo sin actividad). En Vercel los links usan el dominio de producción (`VERCEL_PROJECT_PRODUCTION_URL`).
 - Fotos: en producción se guardan en Vercel Blob (Vercel crea `BLOB_STORE_ID` al conectar el Blob Store; los stores viejos usan `BLOB_READ_WRITE_TOKEN`). En desarrollo, sin esas variables, se guardan en `.dev-uploads/`.
 
