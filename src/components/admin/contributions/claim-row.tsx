@@ -7,6 +7,7 @@ import {
   type AdminChangeState,
   voidClaimAction,
 } from "@/modules/contribution/services/contribution-admin-actions";
+import { BUTTON_SECONDARY } from "@/components/admin/admin-ui";
 
 const IDLE: AdminChangeState = { status: "idle" };
 
@@ -19,7 +20,7 @@ export function ClaimRow({
 }) {
   const [state, action] = useActionState(() => voidClaimAction(claim.id), IDLE);
   return (
-    <li className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-1 border-b py-2.5">
+    <li className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-2 border-b py-4">
       <span
         className={`min-w-0 flex-1 break-words ${claim.voided ? "text-ink/60 line-through" : ""}`}
       >
@@ -33,7 +34,7 @@ export function ClaimRow({
         <form action={action}>
           <ConfirmSubmitButton
             message={`¿Anulás que ${claim.names} lleva ${giftTitle}? La unidad vuelve a quedar libre. No se puede deshacer.`}
-            className="border-ink/40 border px-3 py-1 text-sm"
+            className={BUTTON_SECONDARY}
           >
             Anular
           </ConfirmSubmitButton>

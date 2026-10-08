@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BUTTON_PRIMARY } from "@/components/admin/admin-ui";
 
 const FEEDBACK_MS = 2000;
 
@@ -29,7 +30,7 @@ export function CopyLinkButton({
       type="button"
       onClick={copy}
       aria-label={label}
-      className="bg-ink text-paper px-3 py-1 text-sm"
+      className={`${BUTTON_PRIMARY} text-sm`}
     >
       {state === "copied"
         ? "¡Copiado!"

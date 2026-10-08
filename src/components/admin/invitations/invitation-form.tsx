@@ -7,6 +7,7 @@ import {
 } from "@/modules/invitation/domain/invitation-rules";
 import type { InvitationFormState } from "@/modules/invitation/services/invitation-actions";
 import { GUEST_NAME_FIELD } from "@/modules/invitation/schemas/invitation-form";
+import { BUTTON_PRIMARY, FIELD } from "@/components/admin/admin-ui";
 
 type InvitationFormProps = {
   action: (
@@ -38,7 +39,7 @@ export function InvitationForm({
           Una familia = una invitación.
         </legend>
         {Array.from({ length: MAX_GUEST_NAMES }, (_, index) => (
-          <label key={index} className="flex flex-col gap-1">
+          <label key={index} className={FIELD}>
             <span className="text-sm">Nombre {index + 1}</span>
             <input
               name={GUEST_NAME_FIELD}
@@ -50,11 +51,7 @@ export function InvitationForm({
           </label>
         ))}
       </fieldset>
-      <button
-        type="submit"
-        disabled={isPending}
-        className="bg-ink text-paper px-4 py-3 disabled:opacity-50"
-      >
+      <button type="submit" disabled={isPending} className={BUTTON_PRIMARY}>
         {isPending ? "Guardando…" : submitLabel}
       </button>
       <p role="status" aria-live="polite" className="text-error text-sm">

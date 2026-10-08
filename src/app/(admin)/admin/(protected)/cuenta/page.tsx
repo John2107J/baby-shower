@@ -4,6 +4,7 @@ import { RegenerateCodesForm } from "@/components/admin/account/regenerate-codes
 import { getDb } from "@/lib/db";
 import { getRemainingRecoveryCodes } from "@/modules/auth/services/account-service";
 import { requireAdmin } from "@/modules/auth/services/require-admin";
+import { PAGE, PAGE_TITLE } from "@/components/admin/admin-ui";
 
 export const metadata: Metadata = { title: "Cuenta" };
 
@@ -11,8 +12,8 @@ export default async function AccountPage() {
   const admin = await requireAdmin();
   const remaining = await getRemainingRecoveryCodes(getDb(), admin.id);
   return (
-    <section className="flex flex-col gap-8">
-      <h1 className="text-xl">Cuenta</h1>
+    <section className={PAGE}>
+      <h1 className={PAGE_TITLE}>Cuenta</h1>
       <p className="text-ink/70 text-sm">Ingresaste como {admin.email}.</p>
 
       <div className="flex flex-col gap-3">

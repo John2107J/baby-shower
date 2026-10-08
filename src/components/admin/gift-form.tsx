@@ -5,6 +5,7 @@ import { FormField } from "@/components/admin/form-field";
 import { GiftPhotoLink } from "@/components/admin/gift-photo-link";
 import type { GiftFormValues } from "@/modules/gift/schemas/gift-form";
 import type { GiftFormState } from "@/modules/gift/services/gift-actions";
+import { BUTTON_PRIMARY, FIELD } from "@/components/admin/admin-ui";
 
 type GiftFormProps = {
   action: (state: GiftFormState, formData: FormData) => Promise<GiftFormState>;
@@ -47,7 +48,7 @@ export function GiftForm({
 
       <div className="border-rose-soft flex flex-col gap-3 border p-3">
         {currentPhoto && <GiftPhotoLink {...currentPhoto} />}
-        <label className="flex flex-col gap-1">
+        <label className={FIELD}>
           <span>
             {currentPhoto ? "Cambiar foto (opcional)" : "Foto del regalo"}
           </span>
@@ -110,11 +111,7 @@ export function GiftForm({
         required
       />
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="bg-ink text-paper px-4 py-3 disabled:opacity-50"
-      >
+      <button type="submit" disabled={isPending} className={BUTTON_PRIMARY}>
         {isPending ? "Guardando…" : submitLabel}
       </button>
       <p role="status" aria-live="polite" className="text-error text-sm">

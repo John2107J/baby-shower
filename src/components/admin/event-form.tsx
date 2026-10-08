@@ -7,6 +7,7 @@ import {
   type EventFormState,
   saveEventAction,
 } from "@/modules/event/services/event-actions";
+import { BUTTON_PRIMARY, SECTION_TITLE } from "@/components/admin/admin-ui";
 
 const INITIAL_STATE: EventFormState = { status: "idle" };
 
@@ -24,10 +25,8 @@ export function EventForm({
 
   return (
     <form action={formAction} className="flex flex-col gap-8" noValidate>
-      <fieldset className="flex flex-col gap-4">
-        <legend className="text-rose mb-2 text-sm tracking-widest uppercase">
-          La bebé y la fecha
-        </legend>
+      <fieldset className="flex flex-col gap-5">
+        <legend className={`${SECTION_TITLE} mb-3`}>La bebé y la fecha</legend>
         <FormField
           name="babyName"
           label="Nombre de la bebé"
@@ -55,10 +54,8 @@ export function EventForm({
         />
       </fieldset>
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="text-rose mb-2 text-sm tracking-widest uppercase">
-          Lugar
-        </legend>
+      <fieldset className="flex flex-col gap-5">
+        <legend className={`${SECTION_TITLE} mb-3`}>Lugar</legend>
         <FormField
           name="venueName"
           label="Nombre del lugar (opcional)"
@@ -95,10 +92,8 @@ export function EventForm({
         />
       </fieldset>
 
-      <fieldset className="flex flex-col gap-4">
-        <legend className="text-rose mb-2 text-sm tracking-widest uppercase">
-          Datos para aportes
-        </legend>
+      <fieldset className="flex flex-col gap-5">
+        <legend className={`${SECTION_TITLE} mb-3`}>Datos para aportes</legend>
         <FormField
           name="paymentAlias"
           label="Alias"
@@ -127,11 +122,7 @@ export function EventForm({
       </fieldset>
 
       <div className="flex flex-col gap-3">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="bg-ink text-paper px-4 py-3 disabled:opacity-50"
-        >
+        <button type="submit" disabled={isPending} className={BUTTON_PRIMARY}>
           {isPending ? "Guardando…" : "Guardar"}
         </button>
         <p role="status" aria-live="polite" className="text-sm">

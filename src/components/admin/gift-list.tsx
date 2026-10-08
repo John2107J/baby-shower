@@ -6,9 +6,9 @@ import {
   moveGiftAction,
   setGiftArchivedAction,
 } from "@/modules/gift/services/gift-actions";
+import { BUTTON_SECONDARY } from "@/components/admin/admin-ui";
 
-const SMALL_BUTTON =
-  "border border-ink/40 px-3 py-1 text-sm disabled:opacity-30";
+const SMALL_BUTTON = BUTTON_SECONDARY;
 
 function GiftRow({
   gift,
@@ -20,7 +20,7 @@ function GiftRow({
   isLast: boolean;
 }) {
   return (
-    <li className="border-rose-soft flex gap-4 border-b py-4">
+    <li className="border-rose-soft flex gap-4 border-b py-5">
       <GiftPhotoLink
         title={gift.title}
         imageUrl={gift.imageUrl}
@@ -35,7 +35,7 @@ function GiftRow({
           Reservadas: {gift.claimedUnits}
           {gift.hasContributions && " · tiene aportes"}
         </p>
-        <div className="mt-2 flex flex-wrap gap-2">
+        <div className="mt-2 flex flex-wrap gap-2.5">
           {!gift.isArchived && (
             <>
               <form action={moveGiftAction.bind(null, gift.id, "up")}>

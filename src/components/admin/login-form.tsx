@@ -5,6 +5,7 @@ import {
   loginAction,
   type LoginFormState,
 } from "@/modules/auth/services/login-action";
+import { BUTTON_PRIMARY, FIELD, INPUT } from "@/components/admin/admin-ui";
 
 const INITIAL_STATE: LoginFormState = { error: null };
 
@@ -16,24 +17,24 @@ export function LoginForm() {
 
   return (
     <form action={formAction} className="flex w-full max-w-sm flex-col gap-4">
-      <label className="flex flex-col gap-1">
+      <label className={FIELD}>
         <span>Email</span>
         <input
           name="email"
           type="email"
           autoComplete="username"
           required
-          className="border border-neutral-400 px-3 py-2"
+          className={INPUT}
         />
       </label>
-      <label className="flex flex-col gap-1">
+      <label className={FIELD}>
         <span>Contraseña</span>
         <input
           name="password"
           type="password"
           autoComplete="current-password"
           required
-          className="border border-neutral-400 px-3 py-2"
+          className={INPUT}
         />
       </label>
       {state.error && (
@@ -41,11 +42,7 @@ export function LoginForm() {
           {state.error}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={isPending}
-        className="border border-neutral-800 px-3 py-2 disabled:opacity-50"
-      >
+      <button type="submit" disabled={isPending} className={BUTTON_PRIMARY}>
         {isPending ? "Ingresando…" : "Ingresar"}
       </button>
     </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BUTTON_PRIMARY } from "@/components/admin/admin-ui";
 
 /** Shown only once, right after the codes are created: they are never stored in plain text. */
 export function RecoveryCodesList({ codes }: { codes: string[] }) {
@@ -34,7 +35,7 @@ export function RecoveryCodesList({ codes }: { codes: string[] }) {
       <button
         type="button"
         onClick={copyAll}
-        className="bg-ink text-paper self-start px-3 py-1 text-sm"
+        className={`${BUTTON_PRIMARY} self-start text-sm`}
       >
         {copied ? "¡Copiados!" : "Copiar todos"}
       </button>

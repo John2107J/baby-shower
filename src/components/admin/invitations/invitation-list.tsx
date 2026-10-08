@@ -6,13 +6,14 @@ import { ShareButtons } from "@/components/admin/invitations/share-buttons";
 import { ADMIN_ROUTES } from "@/lib/routes";
 import type { AdminInvitationView } from "@/modules/invitation/dto/invitation-admin-dto";
 import { regenerateInvitationLinkAction } from "@/modules/invitation/services/invitation-actions";
+import { BUTTON_SECONDARY } from "@/components/admin/admin-ui";
 
-const SMALL_BUTTON = "border border-ink/40 px-3 py-1 text-sm";
+const SMALL_BUTTON = BUTTON_SECONDARY;
 
 function InvitationRow({ invitation }: { invitation: AdminInvitationView }) {
   const names = invitation.guestNames.join(", ");
   return (
-    <li className="border-rose-soft flex flex-col gap-2 border-b py-4">
+    <li className="border-rose-soft flex flex-col gap-3 border-b py-5">
       <p className="font-medium break-words">{names}</p>
       <p className="text-ink/70 text-sm">
         {invitation.rsvpLabel}
@@ -20,7 +21,7 @@ function InvitationRow({ invitation }: { invitation: AdminInvitationView }) {
         {invitation.sentLabel ?? "Sin enviar"}
       </p>
       <p className="text-sm break-all select-all">{invitation.link}</p>
-      <div className="flex flex-wrap items-start gap-2">
+      <div className="flex flex-wrap items-start gap-2.5">
         <CopyLinkButton
           link={invitation.link}
           label={`Copiar link de ${names}`}

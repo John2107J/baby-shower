@@ -1,4 +1,5 @@
 import type { InputHTMLAttributes } from "react";
+import { FIELD, INPUT } from "@/components/admin/admin-ui";
 
 type FormFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;
@@ -17,7 +18,7 @@ export function FormField({
   const hintId = hint ? `${name}-hint` : undefined;
   const errorId = error ? `${name}-error` : undefined;
   return (
-    <label className="flex flex-col gap-1">
+    <label className={FIELD}>
       <span>{label}</span>
       <input
         name={name}
@@ -25,7 +26,7 @@ export function FormField({
         aria-describedby={
           [hintId, errorId].filter(Boolean).join(" ") || undefined
         }
-        className="border-ink/40 aria-invalid:border-error border bg-white px-3 py-2"
+        className={INPUT}
         {...inputProps}
       />
       {hint && (

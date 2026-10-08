@@ -11,9 +11,10 @@ import {
   editContributionAmountAction,
   voidContributionAction,
 } from "@/modules/contribution/services/contribution-admin-actions";
+import { BUTTON_SECONDARY } from "@/components/admin/admin-ui";
 
 const IDLE: AdminChangeState = { status: "idle" };
-const SMALL_BUTTON = "border border-ink/40 px-3 py-1 text-sm";
+const SMALL_BUTTON = BUTTON_SECONDARY;
 const STATUS_STYLE = {
   pending: "border-ink/40 text-ink",
   confirmed: "border-rose bg-rose text-paper",
@@ -47,7 +48,7 @@ export function ContributionRow({ item }: { item: AdminContributionItem }) {
   const active = item.status !== "voided";
 
   return (
-    <li className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b py-3">
+    <li className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-2.5 border-b py-5">
       <span className="min-w-0 flex-1 break-words">{item.names}</span>
       <span className="tabular-nums">{item.amountLabel}</span>
       <span
@@ -61,7 +62,7 @@ export function ContributionRow({ item }: { item: AdminContributionItem }) {
       </span>
 
       {active && !showEditor && (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {item.status === "pending" && (
             <form action={confirmAction}>
               <ConfirmSubmitButton

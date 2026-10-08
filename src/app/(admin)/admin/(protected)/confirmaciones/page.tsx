@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getDb } from "@/lib/db";
 import { requireAdmin } from "@/modules/auth/services/require-admin";
 import { getRsvpOverview } from "@/modules/rsvp/services/rsvp-summary-service";
+import { PAGE, PAGE_TITLE } from "@/components/admin/admin-ui";
 
 export const metadata: Metadata = { title: "Confirmaciones" };
 
@@ -38,8 +39,8 @@ export default async function ConfirmationsPage() {
   await requireAdmin();
   const { summary, items } = await getRsvpOverview(getDb());
   return (
-    <section className="flex flex-col gap-8">
-      <h1 className="text-xl">Confirmaciones</h1>
+    <section className={PAGE}>
+      <h1 className={PAGE_TITLE}>Confirmaciones</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat
           label="Vienen"
@@ -65,7 +66,7 @@ export default async function ConfirmationsPage() {
           {items.map((item) => (
             <li
               key={item.id}
-              className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-1 border-b py-3"
+              className="border-rose-soft flex flex-wrap items-center gap-x-3 gap-y-1.5 border-b py-4"
             >
               <span className="min-w-0 flex-1 break-words">{item.names}</span>
               <span
