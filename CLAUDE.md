@@ -232,9 +232,9 @@ Casos que **siempre** deben probarse: dos reservas simultáneas de la última un
 Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grupo, con opciones y tu recomendación, y esperá respuesta:
 
 1. ~~**Base de datos:** ¿Supabase o Neon?~~ → **Resuelto: Neon** (ver sección 12).
-2. **Cálculo del progreso:** si un regalo tiene cantidad 2 y precio unitario $X, ¿el total a cubrir es 2×X? ¿Cómo se combinan "yo lo llevo" (unidades) con "aporto dinero" (monto) en una misma barra y en el "falta"?
-3. **Aportes sin confirmar:** ¿cuentan para la barra de progreso apenas el invitado los declara, o solo cuando los padres los confirman?
-4. **Si ya se completó un regalo:** ¿se oculta, queda visible como "completo", o se muestra al final?
+2. ~~**Cálculo del progreso**~~ → **Resuelto** (decisiones 38–40).
+3. ~~**Aportes sin confirmar**~~ → **Resuelto** (decisiones 41 y 42).
+4. ~~**Regalo completado**~~ → **Resuelto** (decisión 43).
 5. ~~**RSVP:**~~ → **Resuelto** (decisiones 28 y 29).
 6. ~~**Panel de padres:**~~ → **Resuelto** (ver sección 12).
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
@@ -306,11 +306,27 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 30 | Límites del público | **20 links inválidos por IP en 10 min** → esa IP ve "no encontrada" durante 10 min (aunque use un link válido). Cada invitación puede **cambiar su respuesta 10 veces cada 10 min**. |
 | 31 | Tipografías | **Allura** (nombre de la bebé) y **Quicksand** (textos), alojadas en el propio sitio con `next/font`. |
 | 32 | Invitación pública | Diseño aprobado del prototipo: moño en acuarela dibujado en SVG, flores silvestres primaverales, nombres de los invitados arriba. Animaciones: al confirmar "sí" saltan moñitos; al "no" el moño se desata. Mensajes: "¡Qué alegría! Los esperamos." / "😢 Gracias por avisar". |
-| 33 | Lista de regalos en la invitación | El botón "Ver lista de regalos" no se muestra hasta la Fase 5. |
+| 33 | Lista de regalos en la invitación | Desde la Fase 5, debajo de la confirmación: "Si no sabés qué regalarme, mis papis hicieron una lista con cosas que voy a necesitar" y el botón "Ver lista de regalos" (`/i/<token>/regalos`). |
 | 34 | Vista previa (WhatsApp) | Moño de fondo, título "Baby Shower de &lt;nombre de la bebé&gt;" y descripción "Tenés una invitación 💌". Sin nombres de invitados, fecha ni dirección. La imagen no depende del link (es igual para cualquier token). Solo los bots de vista previa (WhatsApp, Facebook, Telegram, Twitter) pueden leer `/i/` según `robots.txt`; nada se indexa (`X-Robots-Tag: noindex`). |
 | 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero, con la fecha de cada respuesta. |
 | 36 | Página principal | Quien entra sin link ve solo el moño, las flores y "Esta invitación es personal. Usá el link que te enviaron." Sin datos del evento. |
 | 37 | Fuentes en archivos | Para la imagen de vista previa, `Allura` y `Quicksand` están en `src/assets/fonts/` con sus licencias OFL (permiten redistribuirlas). |
+| 38 | Total de un regalo | **Cantidad × precio unitario** (ej.: 2 × $100.000 = $200.000). |
+| 39 | Barra de progreso | **Una unidad por vez**: "Unidad 1 de 2: falta $X". Al completarse una unidad, la barra vuelve a empezar con la siguiente. |
+| 40 | "Yo lo llevo" y dinero | "Yo lo llevo" cubre **una unidad entera** y la barra pasa a la siguiente. Una unidad que ya tiene dinero aportado **no** se puede elegir con "Yo lo llevo": solo se puede si queda **al menos una unidad completa sin ningún aporte**. |
+| 41 | Aportes: confirmación | El invitado **declara** el aporte y los padres lo **confirman** en el panel. La barra cuenta **solo aportes confirmados**. |
+| 42 | Tope del aporte | El máximo que se puede declarar es "lo que falta" **descontando también los aportes pendientes de confirmar**, para que nadie se pase del total. Mínimo **$1.000** por aporte. |
+| 43 | Regalo completo | Se marca **"Completo"** y pasa **al final de la lista**. |
+| 44 | "Yo lo llevo" | Reserva directa, **sin confirmación** de los padres. |
+| 45 | Deshacer | **Solo los padres** pueden anular un aporte o un "Yo lo llevo" (desde el panel). El invitado no puede deshacer lo que eligió. |
+| 46 | Panel "Aportes" | Lista de aportes (quién, cuánto, regalo, estado) con **confirmar, editar monto y anular**, y quién eligió "Yo lo llevo" en cada regalo (con opción de anular). |
+| 47 | Aportes pendientes y "Yo lo llevo" | Un aporte **pendiente** también bloquea "Yo lo llevo" en esa unidad, hasta que los padres lo anulen. |
+| 48 | Pendientes que cubren lo que falta | Barra con lo confirmado, leyenda "Aportes esperando confirmación" y botones desactivados. Pasa a "Completo" cuando los padres confirman. |
+| 49 | Lo que eligió el invitado | Cada invitado ve **solo lo suyo**: qué regalo lleva y qué aportó (monto, regalo y si está confirmado). |
+| 50 | Cierre de la lista | La lista de regalos cierra **junto con la confirmación de asistencia**: a las 23:59 del día anterior al evento. |
+| 51 | Editar montos (panel) | Al editar un aporte, los padres también respetan el tope del regalo. |
+| 52 | Límites de la lista | Aportes sin límite de cantidad, pero **3 minutos entre aportes guardados** de la misma invitación (un monto mal escrito no bloquea). Además, 20 intentos por invitación cada 10 minutos. |
+| 53 | Textos de la lista | "¡Gracias! Anotamos que llevás este regalo." / "¡Gracias! Los papás van a confirmar tu aporte." / "Completo", y los demás textos de `src/components/gifts/gift-list-texts.ts`, aprobados por el dueño. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

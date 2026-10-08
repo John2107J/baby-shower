@@ -10,3 +10,8 @@ export const ADMIN_ROUTES = {
   editInvitation: (id: string) => `/admin/invitaciones/${id}`,
   confirmations: "/admin/confirmaciones",
 } as const;
+
+export const GUEST_ROUTES = {
+  invitation: (token: string) => `/i/${token}`,
+  gifts: (token: string) => `/i/${token}/regalos`,
+} as const;
