@@ -19,6 +19,14 @@ export default async function AdminHomePage() {
             Datos del evento
           </Link>
         </li>
+        <li>
+          <Link
+            href={ADMIN_ROUTES.gifts}
+            className="underline underline-offset-4"
+          >
+            Lista de regalos
+          </Link>
+        </li>
       </ul>
     </section>
   );

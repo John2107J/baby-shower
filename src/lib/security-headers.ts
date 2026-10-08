@@ -2,6 +2,9 @@ export type SecurityHeader = { key: string; value: string };
 
 const TWO_YEARS_IN_SECONDS = 63_072_000;
 
+export const VERCEL_BLOB_HOST_PATTERN =
+  "https://*.public.blob.vercel-storage.com";
+
 export function buildContentSecurityPolicy(isDevelopment: boolean): string {
   // Next.js injects inline bootstrap scripts, so 'unsafe-inline' is required
   // until nonce-based CSP is adopted (planned for the hardening phase).
@@ -16,7 +19,8 @@ export function buildContentSecurityPolicy(isDevelopment: boolean): string {
     "default-src": ["'self'"],
     "script-src": scriptSrc,
     "style-src": ["'self'", "'unsafe-inline'"],
-    "img-src": ["'self'", "data:", "blob:"],
+    // Gift photos are served from Vercel Blob (decision 21).
+    "img-src": ["'self'", "data:", "blob:", VERCEL_BLOB_HOST_PATTERN],
     "font-src": ["'self'"],
     "connect-src": ["'self'"],
     "object-src": ["'none'"],

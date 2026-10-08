@@ -291,7 +291,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 15 | Conexión a la base | **Prisma 7 + `@prisma/adapter-pg`** (funciona igual con Neon y con el Postgres del CI). |
 | 16 | Token de invitación | Se guarda **tal cual** en la base (solo accesible desde el servidor) para que el panel pueda volver a mostrar y copiar los links. |
 | 17 | Modelo de datos | Aprobado: incluye `venueName`, borrado lógico de regalos (`archivedAt`), montos en centavos `Int`, claves de idempotencia en reservas/aportes y restricciones CHECK en la base. |
-| 18 | Dominio | **Dominio gratuito de Vercel** (`*.vercel.app`). Definir el nombre final antes de enviar links: si cambia, los links viejos dejan de funcionar. |
+| 18 | Dominio | **Dominio gratuito de Vercel** (`*.vercel.app`). El dueño ya eligió el nombre final y lo configuró en Vercel (no se escribe acá porque incluye datos reales). Los links de invitación se arman con `VERCEL_PROJECT_PRODUCTION_URL`. No cambiarlo después de enviar las invitaciones. |
 | 19 | Fase 3 en PRs | Se divide en tres PRs: 3a datos del evento, 3b regalos (con Vercel Blob), 3c invitaciones. |
 | 20 | Panel | Simple y funcional, mobile-first, con la paleta de los padres aplicada de forma sobria. El diseño cuidado es para la invitación pública. |
 | 21 | Fotos de regalos | Máx. **4 MB**; **JPG, PNG o WebP**; tipo real validado por sus primeros bytes; **sin redimensionar** (sin `sharp`); URL pública con nombre aleatorio. |
@@ -299,6 +299,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 23 | Invitaciones | Se pueden editar los nombres (el link no cambia). Solo se borran si no tienen confirmación, reservas ni aportes. Existe "Regenerar link" (invalida el anterior). Token de 256 bits. |
 | 24 | Datos de pago | Alias según reglas BCRA (6–20 caracteres: letras, números, `.` y `-`). CBU/CVU de 22 dígitos con verificación de ambos dígitos verificadores. |
 | 25 | Evento único | Fila única con id fijo (upsert atómico): nunca puede haber dos eventos. Las coordenadas GPS no se cargan desde el panel; el botón "Cómo llegar" usa el link de Google Maps. |
+| 26 | Almacenamiento local de fotos | Sin `BLOB_READ_WRITE_TOKEN`, en desarrollo las fotos se guardan en `.dev-uploads/` (ignorado por Git) y se sirven por `/api/dev-uploads`, que en producción responde 404. En producción sin token, falla con error. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

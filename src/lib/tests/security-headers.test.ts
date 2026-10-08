@@ -31,6 +31,12 @@ describe("buildContentSecurityPolicy", () => {
     expect(buildContentSecurityPolicy(false)).not.toContain("unsafe-eval");
   });
 
+  it("allows images only from the site itself and Vercel Blob", () => {
+    expect(buildContentSecurityPolicy(false)).toContain(
+      "img-src 'self' data: blob: https://*.public.blob.vercel-storage.com",
+    );
+  });
+
   it("forbids framing and plugins", () => {
     const policy = buildContentSecurityPolicy(false);
     expect(policy).toContain("frame-ancestors 'none'");

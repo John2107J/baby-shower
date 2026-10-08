@@ -5,6 +5,7 @@ import { logoutAction } from "@/modules/auth/services/login-action";
 const NAV_ITEMS = [
   { href: ADMIN_ROUTES.home, label: "Inicio" },
   { href: ADMIN_ROUTES.event, label: "Evento" },
+  { href: ADMIN_ROUTES.gifts, label: "Regalos" },
 ] as const;
 
 export function AdminNav() {
