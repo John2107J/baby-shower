@@ -4,6 +4,7 @@ import { ContributionRow } from "@/components/admin/contributions/contribution-r
 import { getDb } from "@/lib/db";
 import { requireAdmin } from "@/modules/auth/services/require-admin";
 import { getContributionsOverview } from "@/modules/contribution/services/contribution-admin-service";
+import { PAGE, PAGE_TITLE } from "@/components/admin/admin-ui";
 
 export const metadata: Metadata = { title: "Aportes" };
 
@@ -23,8 +24,8 @@ export default async function ContributionsPage() {
   const { summary, contributions, claimGroups } =
     await getContributionsOverview(getDb());
   return (
-    <section className="flex flex-col gap-8">
-      <h1 className="text-xl">Aportes</h1>
+    <section className={PAGE}>
+      <h1 className={PAGE_TITLE}>Aportes</h1>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat label="Confirmado" value={summary.confirmedLabel} />
         <Stat label="Por confirmar" value={summary.pendingLabel} />

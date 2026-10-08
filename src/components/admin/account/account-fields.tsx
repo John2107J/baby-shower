@@ -1,7 +1,13 @@
 import { MIN_PASSWORD_LENGTH } from "@/modules/auth/domain/password-rules";
+import {
+  BUTTON_PRIMARY,
+  FIELD,
+  INPUT,
+  META,
+} from "@/components/admin/admin-ui";
 
-export const INPUT = "border border-neutral-400 px-3 py-2";
-export const SUBMIT = "border border-neutral-800 px-3 py-2 disabled:opacity-50";
+export { INPUT };
+export const SUBMIT = BUTTON_PRIMARY;
 
 export function Field({
   label,
@@ -19,7 +25,7 @@ export function Field({
   hint?: string;
 }) {
   return (
-    <label className="flex flex-col gap-1">
+    <label className={FIELD}>
       <span>{label}</span>
       <input
         name={name}
@@ -29,7 +35,7 @@ export function Field({
         required
         className={INPUT}
       />
-      {hint && <span className="text-ink/70 text-sm">{hint}</span>}
+      {hint && <span className={META}>{hint}</span>}
     </label>
   );
 }

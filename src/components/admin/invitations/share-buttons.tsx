@@ -3,8 +3,9 @@
 import { type MouseEvent, startTransition } from "react";
 import type { ShareLinks } from "@/modules/invitation/dto/invitation-admin-dto";
 import { markInvitationSentAction } from "@/modules/invitation/services/invitation-actions";
+import { BUTTON_SECONDARY } from "@/components/admin/admin-ui";
 
-const BUTTON = "border border-ink/40 px-3 py-1 text-sm";
+const BUTTON = BUTTON_SECONDARY;
 
 /** Phones (touch screens) open their mail app; computers open Gmail on the web (phase 6, answer 3). */
 const isPhone = () => window.matchMedia("(pointer: coarse)").matches;

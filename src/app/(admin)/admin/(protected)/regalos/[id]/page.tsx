@@ -6,6 +6,7 @@ import { requireAdmin } from "@/modules/auth/services/require-admin";
 import { toGiftFormValues } from "@/modules/gift/dto/gift-admin-dto";
 import { updateGiftAction } from "@/modules/gift/services/gift-actions";
 import { getGift } from "@/modules/gift/services/gift-service";
+import { PAGE, PAGE_TITLE } from "@/components/admin/admin-ui";
 
 export const metadata: Metadata = { title: "Editar regalo" };
 
@@ -19,8 +20,8 @@ export default async function EditGiftPage({
   const gift = await getGift(getDb(), id);
   if (!gift) notFound();
   return (
-    <section className="flex flex-col gap-6">
-      <h1 className="text-xl">Editar regalo</h1>
+    <section className={PAGE}>
+      <h1 className={PAGE_TITLE}>Editar regalo</h1>
       <GiftForm
         action={updateGiftAction.bind(null, gift.id)}
         initialValues={toGiftFormValues(gift)}

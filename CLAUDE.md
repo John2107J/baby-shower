@@ -344,6 +344,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 68 | Prueba de carga | Sin dependencias: `npm run test:load` (120 invitados a la vez, base descartable) y `npm run load:http` (solo servidor local). Nunca contra producción. |
 | 69 | Respaldos | Manuales con `pg_dump`: antes de enviar las invitaciones y después del evento. Guía en `docs/manual-tecnico.md`. |
 | 70 | Después del evento | Pasos manuales documentados: respaldo, `npm run export:summary` (CSV para agradecimientos) y borrado de los datos de invitados. Nada se borra solo. |
+| 71 | Menú y espaciado del panel | En celular y tablet, menú ☰ arriba a la derecha que se despliega hacia abajo (una opción por renglón, sección actual marcada, Cerrar sesión al final); en computadora (≥ 1024 px), links en una fila. Estilos compartidos en `src/components/admin/admin-ui.ts`: más aire y botones/campos de al menos 44 px. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

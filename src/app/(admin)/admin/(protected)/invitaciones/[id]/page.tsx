@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db";
 import { requireAdmin } from "@/modules/auth/services/require-admin";
 import { updateInvitationAction } from "@/modules/invitation/services/invitation-actions";
 import { getInvitation } from "@/modules/invitation/services/invitation-service";
+import { PAGE, PAGE_TITLE } from "@/components/admin/admin-ui";
 
 export const metadata: Metadata = { title: "Editar invitación" };
 
@@ -18,8 +19,8 @@ export default async function EditInvitationPage({
   const invitation = await getInvitation(getDb(), id);
   if (!invitation) notFound();
   return (
-    <section className="flex flex-col gap-6">
-      <h1 className="text-xl">Editar invitación</h1>
+    <section className={PAGE}>
+      <h1 className={PAGE_TITLE}>Editar invitación</h1>
       <p className="text-ink/70 text-sm">
         El link de esta invitación no cambia al editar los nombres.
       </p>
