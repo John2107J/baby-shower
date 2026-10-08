@@ -27,6 +27,14 @@ export default async function AdminHomePage() {
             Lista de regalos
           </Link>
         </li>
+        <li>
+          <Link
+            href={ADMIN_ROUTES.invitations}
+            className="underline underline-offset-4"
+          >
+            Invitaciones y links
+          </Link>
+        </li>
       </ul>
     </section>
   );

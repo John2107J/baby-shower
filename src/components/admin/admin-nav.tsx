@@ -6,12 +6,13 @@ const NAV_ITEMS = [
   { href: ADMIN_ROUTES.home, label: "Inicio" },
   { href: ADMIN_ROUTES.event, label: "Evento" },
   { href: ADMIN_ROUTES.gifts, label: "Regalos" },
+  { href: ADMIN_ROUTES.invitations, label: "Invitaciones" },
 ] as const;
 
 export function AdminNav() {
   return (
     <header className="border-rose-soft border-b">
-      <nav className="mx-auto flex max-w-xl items-center gap-5 px-4 py-3 text-sm">
+      <nav className="mx-auto flex max-w-xl flex-wrap items-center gap-x-5 gap-y-2 px-4 py-3 text-sm">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}
