@@ -14,7 +14,9 @@ import {
   UNITS_PER_CLAIM,
 } from "@/modules/contribution/domain/gift-list-rules";
 
-type Transaction = Parameters<Parameters<PrismaClient["$transaction"]>[0]>[0];
+export type Transaction = Parameters<
+  Parameters<PrismaClient["$transaction"]>[0]
+>[0];
 type Db = PrismaClient | Transaction;
 
 export type PublicGiftRecord = {
@@ -174,16 +176,19 @@ export async function findExistingRequest(
 /**
  * Locks the gift's row until the transaction ends, so concurrent claims and
  * contributions on the same gift run one after the other and each one sees
- * what the previous ones saved (CLAUDE.md §3.6). Archived gifts count as missing.
+ * what the previous ones saved (CLAUDE.md §3.6). Archived gifts count as
+ * missing for guests; the parents still manage their history.
  */
-async function lockGift(
+export async function lockGift(
   tx: Transaction,
   giftId: string,
+  { includeArchived = false }: { includeArchived?: boolean } = {},
 ): Promise<GiftCommitments | null> {
   const rows = await tx.$queryRaw<
     { quantity: number; referencePriceCents: number }[]
   >`SELECT "quantity", "referencePriceCents" FROM "Gift"
-    WHERE "id" = ${giftId}::uuid AND "archivedAt" IS NULL FOR UPDATE`;
+    WHERE "id" = ${giftId}::uuid AND (${includeArchived} OR "archivedAt" IS NULL)
+    FOR UPDATE`;
   const gift = rows[0];
   if (!gift) return null;
   const totals = (await commitmentsByGift(tx, [giftId])).get(giftId)!;

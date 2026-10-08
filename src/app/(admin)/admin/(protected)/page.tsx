@@ -43,6 +43,14 @@ export default async function AdminHomePage() {
             Confirmaciones
           </Link>
         </li>
+        <li>
+          <Link
+            href={ADMIN_ROUTES.contributions}
+            className="underline underline-offset-4"
+          >
+            Aportes y regalos elegidos
+          </Link>
+        </li>
       </ul>
     </section>
   );
