@@ -1,3 +1,8 @@
+import {
+  EVENT_TIME_ZONE,
+  utcToZonedDateTime,
+  zonedDateTimeToUtc,
+} from "@/lib/time-zone";
 import type { RateLimitRule } from "@/lib/rate-limit";
 
 /** Decision 28: guests choose how many attend, up to 6 per invitation. */
@@ -22,12 +27,13 @@ export const invalidTokenKey = (clientIp: string) =>
 export const rsvpChangeKey = (token: string) => `rsvp:token:${token}`;
 
 /**
- * Answers can be given or changed until the event starts (owner's answer 4 in
- * phase 5, replacing decision 29); after that the RSVP closes for everyone.
+ * Decision 29: answers can be given or changed until 23:59 of the day before
+ * the event (Argentina time); after that the RSVP closes for everyone.
  * Returns the first instant at which the RSVP is closed.
  */
 export function rsvpClosesAt(eventStartsAt: Date): Date {
-  return eventStartsAt;
+  const { date } = utcToZonedDateTime(eventStartsAt, EVENT_TIME_ZONE);
+  return zonedDateTimeToUtc(date, "00:00", EVENT_TIME_ZONE);
 }
 
 export function isRsvpOpen(

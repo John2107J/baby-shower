@@ -35,7 +35,7 @@ describe("toGuestInvitationView", () => {
       time: "16:30",
       rsvp: { status: "pending" },
       rsvpOpen: true,
-      rsvpDeadlineLabel: "sábado 9 de noviembre a las 16:30",
+      rsvpDeadlineLabel: "viernes 8 de noviembre",
       maxAttendees: 6,
     });
   });
@@ -90,13 +90,9 @@ describe("toGuestInvitationView", () => {
     });
   });
 
-  it("keeps the RSVP open on the event day until the event starts", () => {
-    const at = (time: string) =>
-      zonedDateTimeToUtc("2030-11-09", time, EVENT_TIME_ZONE);
-    expect(toGuestInvitationView(invitation, event, at("16:29")).rsvpOpen).toBe(
-      true,
-    );
-    expect(toGuestInvitationView(invitation, event, at("16:30")).rsvpOpen).toBe(
+  it("reports the RSVP as closed on the event day", () => {
+    const eventDay = zonedDateTimeToUtc("2030-11-09", "08:00", EVENT_TIME_ZONE);
+    expect(toGuestInvitationView(invitation, event, eventDay).rsvpOpen).toBe(
       false,
     );
   });

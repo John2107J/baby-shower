@@ -20,8 +20,8 @@ const IP = "203.0.113.9";
 const UNIT = 100_000_00; // $100.000
 // The fixture event is on 2030-01-15 at 16:30 (Argentina).
 const OPEN = zonedDateTimeToUtc("2030-01-10", "12:00", EVENT_TIME_ZONE);
-const LAST_MINUTE = zonedDateTimeToUtc("2030-01-15", "16:29", EVENT_TIME_ZONE);
-const CLOSED = zonedDateTimeToUtc("2030-01-15", "16:30", EVENT_TIME_ZONE);
+const LAST_MINUTE = zonedDateTimeToUtc("2030-01-14", "23:59", EVENT_TIME_ZONE);
+const CLOSED = zonedDateTimeToUtc("2030-01-15", "00:00", EVENT_TIME_ZONE);
 
 beforeEach(async () => {
   await resetDatabase(db);
@@ -270,7 +270,7 @@ describe("shared rules", () => {
     expect(result.status === "found" && result.list.gifts).toEqual([]);
   });
 
-  it("closes when the event starts (owner's answer 4 in phase 5)", async () => {
+  it("closes together with the RSVP, at 00:00 of the event day", async () => {
     const guest = await createGuest();
     const giftId = await createGift(2);
     expect(await claim(guest.token, giftId, LAST_MINUTE)).toEqual({ ok: true });

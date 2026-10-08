@@ -15,8 +15,8 @@ const db = createTestDb();
 const IP = "203.0.113.7";
 // The fixture event is on 2030-01-15 at 16:30 (Argentina).
 const OPEN = zonedDateTimeToUtc("2030-01-10", "12:00", EVENT_TIME_ZONE);
-const LAST_MINUTE = zonedDateTimeToUtc("2030-01-15", "16:29", EVENT_TIME_ZONE);
-const CLOSED = zonedDateTimeToUtc("2030-01-15", "16:30", EVENT_TIME_ZONE);
+const LAST_MINUTE = zonedDateTimeToUtc("2030-01-14", "23:59", EVENT_TIME_ZONE);
+const CLOSED = zonedDateTimeToUtc("2030-01-15", "00:00", EVENT_TIME_ZONE);
 
 const yes = (attendees: number) => ({ attending: true as const, attendees });
 const no = { attending: false as const, attendees: 0 as const };

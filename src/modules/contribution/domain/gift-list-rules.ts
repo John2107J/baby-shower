@@ -1,4 +1,5 @@
 import type { RateLimitRule } from "@/lib/rate-limit";
+import { rsvpClosesAt } from "@/modules/rsvp/domain/rsvp-rules";
 
 /** Decision 40: each "Yo lo llevo" covers exactly one whole unit. */
 export const UNITS_PER_CLAIM = 1;
@@ -19,10 +20,10 @@ export const GIFT_ACTION_RATE_LIMIT: RateLimitRule = {
 export const giftActionRateKey = (invitationId: string) =>
   `gift-list:invitation:${invitationId}`;
 
-/** Owner's answer 4 in phase 5: the gift list closes when the event starts, like the RSVP. */
+/** Owner's decision in phase 5: the gift list closes together with the RSVP (decision 29). */
 export function isGiftListOpen(
   eventStartsAt: Date,
   now: Date = new Date(),
 ): boolean {
-  return now.getTime() < eventStartsAt.getTime();
+  return now.getTime() < rsvpClosesAt(eventStartsAt).getTime();
 }

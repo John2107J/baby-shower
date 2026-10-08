@@ -2,8 +2,7 @@ import type { GiftActionState } from "@/modules/contribution/services/gift-list-
 
 type FailureStatus = Exclude<GiftActionState["status"], "idle" | "saved">;
 
-// The two success texts and "Completo" were approved by the owner (phase 5,
-// answer 7); the rest are proposals pending approval.
+// Texts approved by the owner (phase 5).
 export const GIFT_TEXTS = {
   claimed: "¡Gracias! Anotamos que llevás este regalo.",
   contributed: "¡Gracias! Los papás van a confirmar tu aporte.",

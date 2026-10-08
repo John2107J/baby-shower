@@ -44,9 +44,9 @@ GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cad
 
 ## Invitación pública
 
-- `/i/<token>`: invitación personal con confirmación de asistencia (1 a 6 personas), editable hasta que empieza el evento.
+- `/i/<token>`: invitación personal con confirmación de asistencia (1 a 6 personas), editable hasta las 23:59 del día anterior al evento.
 - Un link inválido o una IP bloqueada ven la misma página "no encontrada".
-- `/i/<token>/regalos`: lista de regalos pública. Barra por unidad, "Yo lo llevo" (una unidad) y "Aportar dinero" (alias/CBU y aporte declarado, pendiente de confirmación de los padres). Cada invitado ve solo lo que eligió él; nunca nombres ni montos de otros. Cierra cuando empieza el evento.
+- `/i/<token>/regalos`: lista de regalos pública. Barra por unidad, "Yo lo llevo" (una unidad) y "Aportar dinero" (alias/CBU y aporte declarado, pendiente de confirmación de los padres). Cada invitado ve solo lo que eligió él; nunca nombres ni montos de otros. Cierra junto con la confirmación (23:59 del día anterior).
 - Vista previa en WhatsApp: imagen con el moño y el nombre de la bebé (`/i/<token>/opengraph-image`), sin datos de invitados.
 - `/` muestra un mensaje neutro para quien entra sin link.
 

@@ -1,7 +1,11 @@
 import { EVENT_TIME_ZONE } from "@/lib/time-zone";
 import type { EventRecord } from "@/modules/event/repositories/event-repository";
 import type { GuestInvitationRecord } from "@/modules/invitation/repositories/guest-invitation-repository";
-import { MAX_ATTENDEES, isRsvpOpen } from "@/modules/rsvp/domain/rsvp-rules";
+import {
+  MAX_ATTENDEES,
+  isRsvpOpen,
+  rsvpClosesAt,
+} from "@/modules/rsvp/domain/rsvp-rules";
 
 export type GuestRsvp =
   | { status: "pending" }
@@ -57,11 +61,7 @@ export function toGuestInvitationView(
   event: EventRecord,
   now: Date = new Date(),
 ): GuestInvitationView {
-  const time = part(event.startsAt, {
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  });
+  const lastDay = new Date(rsvpClosesAt(event.startsAt).getTime() - 1);
   return {
     guestNamesLabel: new Intl.ListFormat("es", {
       style: "long",
@@ -71,15 +71,18 @@ export function toGuestInvitationView(
     weekday: capitalize(part(event.startsAt, { weekday: "long" })),
     dayOfMonth: part(event.startsAt, { day: "numeric" }),
     month: part(event.startsAt, { month: "long" }).toUpperCase(),
-    time,
+    time: part(event.startsAt, {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }),
     venueName: event.venueName,
     streetAddress: event.streetAddress,
     city: event.city,
     mapsUrl: event.mapsUrl,
     rsvp: toGuestRsvp(invitation),
     rsvpOpen: isRsvpOpen(event.startsAt, now),
-    // The RSVP closes when the event starts.
-    rsvpDeadlineLabel: `${part(event.startsAt, { weekday: "long" })} ${part(event.startsAt, { day: "numeric" })} de ${part(event.startsAt, { month: "long" })} a las ${time}`,
+    rsvpDeadlineLabel: `${part(lastDay, { weekday: "long" })} ${part(lastDay, { day: "numeric" })} de ${part(lastDay, { month: "long" })}`,
     maxAttendees: MAX_ATTENDEES,
   };
 }
