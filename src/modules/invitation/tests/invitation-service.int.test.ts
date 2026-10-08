@@ -5,6 +5,7 @@ import {
   deleteInvitation,
   getInvitation,
   getInvitations,
+  markInvitationAsSent,
   regenerateInvitationLink,
   updateInvitationFromForm,
 } from "@/modules/invitation/services/invitation-service";
@@ -124,6 +125,41 @@ describe("regenerateInvitationLink", () => {
         "00000000-0000-4000-8000-00000000abcd",
       ),
     ).toBe(false);
+  });
+});
+
+describe("markInvitationAsSent (phase 6, answer 4)", () => {
+  const sentVia = async (id: string) =>
+    (await db.invitation.findUniqueOrThrow({ where: { id } })).sentVia;
+
+  it("records the last button used", async () => {
+    const id = await create(["Ana"]);
+    expect(await sentVia(id)).toBeNull();
+    expect(await markInvitationAsSent(db, id, "WHATSAPP")).toBe(true);
+    expect(await sentVia(id)).toBe("WHATSAPP");
+    expect(await markInvitationAsSent(db, id, "EMAIL")).toBe(true);
+    expect(await sentVia(id)).toBe("EMAIL");
+  });
+
+  it("clears the mark when the link is regenerated: the new link was not sent", async () => {
+    const id = await create(["Ana"]);
+    await markInvitationAsSent(db, id, "WHATSAPP");
+    await regenerateInvitationLink(db, id);
+    expect(await sentVia(id)).toBeNull();
+  });
+
+  it("rejects unknown channels and ids without touching anything", async () => {
+    const id = await create(["Ana"]);
+    expect(await markInvitationAsSent(db, id, "SMS")).toBe(false);
+    expect(await markInvitationAsSent(db, "not-a-uuid", "EMAIL")).toBe(false);
+    expect(
+      await markInvitationAsSent(
+        db,
+        "00000000-0000-4000-8000-00000000abcd",
+        "EMAIL",
+      ),
+    ).toBe(false);
+    expect(await sentVia(id)).toBeNull();
   });
 });
 

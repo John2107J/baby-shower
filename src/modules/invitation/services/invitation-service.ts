@@ -9,6 +9,7 @@ import {
   deleteInvitationWithoutActivity,
   findInvitation,
   listInvitations,
+  markInvitationSent,
   replaceInvitationToken,
   updateInvitationNames,
 } from "@/modules/invitation/repositories/invitation-repository";
@@ -109,6 +110,19 @@ export async function regenerateInvitationLink(
 ): Promise<boolean> {
   if (!isValidId(id)) return false;
   return withFreshToken((token) => replaceInvitationToken(db, id, token));
+}
+
+const sentViaSchema = z.enum(["WHATSAPP", "EMAIL"]);
+
+/** Marks that the parents opened WhatsApp or the mail composer for this invitation. */
+export async function markInvitationAsSent(
+  db: PrismaClient,
+  id: string,
+  via: string,
+): Promise<boolean> {
+  const sentVia = sentViaSchema.safeParse(via);
+  if (!isValidId(id) || !sentVia.success) return false;
+  return markInvitationSent(db, id, sentVia.data);
 }
 
 export async function deleteInvitation(

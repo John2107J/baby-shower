@@ -13,3 +13,11 @@ export function generateInvitationToken(): string {
 }
 
 export const INVITATION_TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/;
+
+/** "Ana, Luis y Sofía": how guest names read in Spanish. */
+export function formatGuestNames(guestNames: string[]): string {
+  return new Intl.ListFormat("es", {
+    style: "long",
+    type: "conjunction",
+  }).format(guestNames);
+}
