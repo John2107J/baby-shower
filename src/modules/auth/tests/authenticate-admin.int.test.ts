@@ -1,5 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { LOGIN_RATE_LIMIT } from "@/modules/auth/domain/login-rules";
+import {
+  findAdminSessionVersion,
+  upsertAdminUserPassword,
+} from "@/modules/auth/repositories/admin-user-repository";
 import { authenticateAdmin } from "@/modules/auth/services/authenticate-admin";
 import { hashPassword } from "@/modules/auth/services/password";
 import { createTestDb, resetDatabase } from "@/test/test-db";
@@ -25,8 +29,23 @@ describe("authenticateAdmin", () => {
     const result = await login("Padres@Example.com", PASSWORD);
     expect(result).toEqual({
       ok: true,
-      admin: { id: expect.any(String), email: EMAIL },
+      admin: { id: expect.any(String), email: EMAIL, sessionVersion: 0 },
     });
+  });
+
+  it("a new password closes old sessions: the session version goes up", async () => {
+    expect(
+      await upsertAdminUserPassword(
+        db,
+        EMAIL,
+        await hashPassword("otra-clave-larga"),
+      ),
+    ).toBe("updated");
+    const result = await login(EMAIL, "otra-clave-larga");
+    expect(result.ok && result.admin.sessionVersion).toBe(1);
+    expect(
+      await findAdminSessionVersion(db, result.ok ? result.admin.id : ""),
+    ).toBe(1);
   });
 
   it("rejects a wrong password", async () => {

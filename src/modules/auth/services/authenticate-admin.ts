@@ -8,7 +8,11 @@ import { findAdminUserByEmail } from "@/modules/auth/repositories/admin-user-rep
 import { credentialsSchema } from "@/modules/auth/schemas/credentials";
 import { hashPassword, verifyPassword } from "@/modules/auth/services/password";
 
-export type AuthenticatedAdmin = { id: string; email: string };
+export type AuthenticatedAdmin = {
+  id: string;
+  email: string;
+  sessionVersion: number;
+};
 
 export type AuthenticationResult =
   | { ok: true; admin: AuthenticatedAdmin }
@@ -54,5 +58,12 @@ export async function authenticateAdmin(
     resetRateLimit(db, keys.byIp),
     resetRateLimit(db, keys.byEmail),
   ]);
-  return { ok: true, admin: { id: user.id, email: user.email } };
+  return {
+    ok: true,
+    admin: {
+      id: user.id,
+      email: user.email,
+      sessionVersion: user.sessionVersion,
+    },
+  };
 }

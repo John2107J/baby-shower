@@ -41,7 +41,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           getClientIp(request.headers),
         );
         if (result.ok)
-          return { id: result.admin.id, email: result.admin.email };
+          return {
+            id: result.admin.id,
+            email: result.admin.email,
+            sessionVersion: result.admin.sessionVersion,
+          };
 
         logger.warn("admin login rejected", { reason: result.reason });
         if (result.reason === "rate_limited") throw new RateLimitedSignin();
@@ -50,13 +54,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    // Keep the session token minimal: only the admin id and email.
+    // Keep the session token minimal: the admin id, email and password version.
     jwt({ token, user }) {
-      if (user?.id) token.sub = user.id;
+      if (user?.id) {
+        token.sub = user.id;
+        token.sessionVersion = user.sessionVersion;
+      }
       return token;
     },
     session({ session, token }) {
       if (token.sub) session.user.id = token.sub;
+      session.user.sessionVersion = token.sessionVersion;
       return session;
     },
   },

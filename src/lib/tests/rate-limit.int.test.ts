@@ -1,7 +1,9 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import {
+  STALE_BUCKET_AGE_MS,
   consumeRateLimit,
   hashRateLimitKey,
+  purgeStaleRateLimits,
   resetRateLimit,
 } from "@/lib/rate-limit";
 import { createTestDb, resetDatabase } from "@/test/test-db";
@@ -60,5 +62,23 @@ describe("consumeRateLimit", () => {
       await consumeRateLimit(db, KEY, RULE);
     await resetRateLimit(db, KEY);
     expect((await consumeRateLimit(db, KEY, RULE)).allowed).toBe(true);
+  });
+});
+
+describe("purgeStaleRateLimits", () => {
+  it("deletes only buckets older than a day, now and then while counting", async () => {
+    const old = new Date("2026-01-01T00:00:00Z");
+    const now = new Date(old.getTime() + STALE_BUCKET_AGE_MS + 1);
+    const never = () => false;
+    await consumeRateLimit(db, "old", RULE, old, never);
+    await consumeRateLimit(db, "recent", RULE, now, never);
+    expect(await db.rateLimitBucket.count()).toBe(2);
+
+    await consumeRateLimit(db, KEY, RULE, now, () => true);
+    const keys = (await db.rateLimitBucket.findMany()).map((b) => b.key);
+    expect(keys.sort()).toEqual(
+      [hashRateLimitKey("recent"), hashRateLimitKey(KEY)].sort(),
+    );
+    expect(await purgeStaleRateLimits(db, now)).toBe(0);
   });
 });

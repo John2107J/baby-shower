@@ -23,3 +23,20 @@ Estado al cerrar la Fase 7. **Ninguna vulnerabilidad afecta al código que corre
 `npm audit fix --force` **no** se debe usar: baja Prisma a la versión 6 y rompe el proyecto.
 
 **Volver a revisar** con `npm audit` y `npm outdated` antes de enviar las invitaciones y antes de cualquier actualización de dependencias (siempre con aprobación del dueño, `CLAUDE.md` §0.6).
+
+## Revisión de seguridad (Fase 7)
+
+Revisión completa del código (permisos, aislamiento entre invitados, privacidad, concurrencia, validaciones, límites, sesión, logs y cabeceras), más una revisión independiente. Sin hallazgos críticos ni graves.
+
+**Corregido:**
+
+- Cambiar la contraseña (`npm run admin:set-password`) **cierra todas las sesiones abiertas** del panel: cada sesión guarda la "versión" de la contraseña y `requireAdmin()` la compara con la base en cada pedido.
+- La tabla de límites de intentos se **limpia sola**: aproximadamente 1 de cada 100 intentos borra los registros de más de un día.
+- El filtro de la CSP ya no excluye páginas cuyo nombre solo _empieza_ con "api".
+
+**Riesgos aceptados por el dueño:**
+
+- **Metadatos de las fotos de regalos** (por ejemplo, GPS): no se borran. Las fotos se descargan de las tiendas, no se sacan en casa.
+- **Montos deducibles:** quien recargue la lista justo antes y después de un aporte ajeno podría deducir el monto (nunca el nombre). Es consecuencia de mostrar "lo que falta" (decisiones 39 y 42).
+- **Optimizador de imágenes:** acepta fotos de cualquier cuenta de Vercel Blob (`*.public.blob.vercel-storage.com`). A lo sumo, un tercero gastaría cuota de optimización.
+- **IP del visitante:** los límites por IP confían en `x-real-ip`/`x-forwarded-for`, que Vercel completa y no se pueden falsificar allí. **El sitio debe correr en Vercel**; detrás de otro proxy habría que revisarlo.

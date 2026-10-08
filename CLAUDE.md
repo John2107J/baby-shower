@@ -337,6 +337,9 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 61 | Botón Gmail | En computadora abre Gmail web; en el celular (pantalla táctil) abre la app de correo con `mailto:`. |
 | 62 | Marca "enviada" | Al tocar WhatsApp o Gmail, la invitación queda "Enviada por WhatsApp" o "Enviada por mail" (registra el botón, no que el mensaje salió). Regenerar el link la vuelve a "Sin enviar". |
 | 63 | CSP | **Con nonce** por respuesta (`src/proxy.ts`); todas las páginas se generan en cada visita. Estilos *inline* permitidos. |
+| 64 | Sesiones del panel | Cambiar la contraseña cierra todas las sesiones abiertas (`AdminUser.sessionVersion`). |
+| 65 | Tabla de límites | Se limpia sola (registros de más de un día). |
+| 66 | Riesgos aceptados (Fase 7) | Metadatos de fotos, montos deducibles, optimizador con cualquier Blob, IP confiable solo en Vercel. Detalle en `docs/seguridad.md`. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)
