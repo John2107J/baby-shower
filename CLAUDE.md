@@ -232,9 +232,9 @@ Casos que **siempre** deben probarse: dos reservas simultáneas de la última un
 Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grupo, con opciones y tu recomendación, y esperá respuesta:
 
 1. ~~**Base de datos:** ¿Supabase o Neon?~~ → **Resuelto: Neon** (ver sección 12).
-2. **Cálculo del progreso:** si un regalo tiene cantidad 2 y precio unitario $X, ¿el total a cubrir es 2×X? ¿Cómo se combinan "yo lo llevo" (unidades) con "aporto dinero" (monto) en una misma barra y en el "falta"?
-3. **Aportes sin confirmar:** ¿cuentan para la barra de progreso apenas el invitado los declara, o solo cuando los padres los confirman?
-4. **Si ya se completó un regalo:** ¿se oculta, queda visible como "completo", o se muestra al final?
+2. ~~**Cálculo del progreso**~~ → **Resuelto** (decisiones 38–40).
+3. ~~**Aportes sin confirmar**~~ → **Resuelto** (decisiones 41 y 42).
+4. ~~**Regalo completado**~~ → **Resuelto** (decisión 43).
 5. ~~**RSVP:**~~ → **Resuelto** (decisiones 28 y 29).
 6. ~~**Panel de padres:**~~ → **Resuelto** (ver sección 12).
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
@@ -311,6 +311,15 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero, con la fecha de cada respuesta. |
 | 36 | Página principal | Quien entra sin link ve solo el moño, las flores y "Esta invitación es personal. Usá el link que te enviaron." Sin datos del evento. |
 | 37 | Fuentes en archivos | Para la imagen de vista previa, `Allura` y `Quicksand` están en `src/assets/fonts/` con sus licencias OFL (permiten redistribuirlas). |
+| 38 | Total de un regalo | **Cantidad × precio unitario** (ej.: 2 × $100.000 = $200.000). |
+| 39 | Barra de progreso | **Una unidad por vez**: "Unidad 1 de 2: falta $X". Al completarse una unidad, la barra vuelve a empezar con la siguiente. |
+| 40 | "Yo lo llevo" y dinero | "Yo lo llevo" cubre **una unidad entera** y la barra pasa a la siguiente. Una unidad que ya tiene dinero aportado **no** se puede elegir con "Yo lo llevo": solo se puede si queda **al menos una unidad completa sin ningún aporte**. |
+| 41 | Aportes: confirmación | El invitado **declara** el aporte y los padres lo **confirman** en el panel. La barra cuenta **solo aportes confirmados**. |
+| 42 | Tope del aporte | El máximo que se puede declarar es "lo que falta" **descontando también los aportes pendientes de confirmar**, para que nadie se pase del total. Mínimo **$1.000** por aporte. |
+| 43 | Regalo completo | Se marca **"Completo"** y pasa **al final de la lista**. |
+| 44 | "Yo lo llevo" | Reserva directa, **sin confirmación** de los padres. |
+| 45 | Deshacer | **Solo los padres** pueden anular un aporte o un "Yo lo llevo" (desde el panel). El invitado no puede deshacer lo que eligió. |
+| 46 | Panel "Aportes" | Lista de aportes (quién, cuánto, regalo, estado) con **confirmar, editar monto y anular**, y quién eligió "Yo lo llevo" en cada regalo (con opción de anular). |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)
