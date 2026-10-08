@@ -9,11 +9,17 @@ export const REDACTED = "[REDACTED]";
 const SENSITIVE_KEY_PATTERN =
   /token|password|secret|authorization|cookie|cbu|alias|name|email|phone|amount|address/i;
 
+// Technical keys that look sensitive to the pattern above but only carry the
+// class name of an error (e.g. "BlobAccessError"), never user data.
+const TECHNICAL_KEYS: ReadonlySet<string> = new Set(["errorName"]);
+
 export function redact(context: LogContext): Record<string, LogValue> {
   return Object.fromEntries(
     Object.entries(context).map(([key, value]) => [
       key,
-      SENSITIVE_KEY_PATTERN.test(key) ? REDACTED : value,
+      !TECHNICAL_KEYS.has(key) && SENSITIVE_KEY_PATTERN.test(key)
+        ? REDACTED
+        : value,
     ]),
   );
 }
