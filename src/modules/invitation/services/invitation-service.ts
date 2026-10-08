@@ -3,7 +3,6 @@ import { Prisma, type PrismaClient } from "@/generated/prisma/client";
 import { generateInvitationToken } from "@/modules/invitation/domain/invitation-rules";
 import {
   type AdminInvitationRecord,
-  AttendeesExceedNamesError,
   InvitationHasActivityError,
   InvitationNotFoundError,
   createInvitation,
@@ -99,13 +98,6 @@ export async function updateInvitationFromForm(
   } catch (caught) {
     if (caught instanceof InvitationNotFoundError)
       return { ok: false, reason: "not_found" };
-    if (caught instanceof AttendeesExceedNamesError) {
-      return {
-        ok: false,
-        reason: "invalid",
-        error: `Ya confirmaron ${caught.attendees} persona(s): la invitación no puede tener menos nombres.`,
-      };
-    }
     throw caught;
   }
 }

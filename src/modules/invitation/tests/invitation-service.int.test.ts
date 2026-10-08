@@ -82,22 +82,15 @@ describe("updateInvitationFromForm", () => {
     expect(after?.token).toBe(before?.token);
   });
 
-  it("does not allow fewer names than people already confirmed", async () => {
-    const id = await create(["Ana", "Luis", "Sofía"]);
+  it("allows fewer names than confirmed attendees (up to 6 people per invitation)", async () => {
+    const id = await create(["Familia Pérez"]);
     await db.invitation.update({
       where: { id },
-      data: { rsvpStatus: "ATTENDING", rsvpAttendeesCount: 2 },
+      data: { rsvpStatus: "ATTENDING", rsvpAttendeesCount: 5 },
     });
-    expect(await updateInvitationFromForm(db, id, ["Ana"])).toEqual({
-      ok: false,
-      reason: "invalid",
-      error:
-        "Ya confirmaron 2 persona(s): la invitación no puede tener menos nombres.",
-    });
-    expect(await updateInvitationFromForm(db, id, ["Ana", "Luis"])).toEqual({
-      ok: true,
-      id,
-    });
+    expect(
+      await updateInvitationFromForm(db, id, ["Familia Pérez Gómez"]),
+    ).toEqual({ ok: true, id });
   });
 
   it.each(["not-a-uuid", "00000000-0000-4000-8000-00000000abcd"])(

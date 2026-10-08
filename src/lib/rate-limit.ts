@@ -48,6 +48,22 @@ export async function consumeRateLimit(
   return { allowed, retryAfterMs };
 }
 
+/** Reports whether `key` is already over the limit, without counting a new hit. */
+export async function isRateLimited(
+  db: PrismaClient,
+  key: string,
+  rule: RateLimitRule,
+  now: Date = new Date(),
+): Promise<boolean> {
+  const bucket = await db.rateLimitBucket.findUnique({
+    where: { key: hashRateLimitKey(key) },
+  });
+  if (!bucket) return false;
+  const windowIsActive =
+    bucket.windowStart.getTime() > now.getTime() - rule.windowMs;
+  return windowIsActive && bucket.count > rule.limit;
+}
+
 export async function resetRateLimit(
   db: PrismaClient,
   key: string,
