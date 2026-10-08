@@ -34,6 +34,13 @@ Revisión completa del código (permisos, aislamiento entre invitados, privacida
 - La tabla de límites de intentos se **limpia sola**: aproximadamente 1 de cada 100 intentos borra los registros de más de un día.
 - El filtro de la CSP ya no excluye páginas cuyo nombre solo _empieza_ con "api".
 
+**Cuenta del panel (Fase 7c):**
+
+- El alta (`/admin/crear-cuenta`) exige `ADMIN_SETUP_CODE` (comparación en tiempo constante) y solo existe mientras no haya cuenta; un bloqueo de tabla impide que dos altas simultáneas creen dos cuentas.
+- Los códigos de recuperación se generan con el CSPRNG (≈49,5 bits cada uno), se guardan solo como hash argon2id y se gastan bajo bloqueo de fila: un código no se puede usar dos veces, ni con pedidos simultáneos. La respuesta es la misma para email desconocido, código mal escrito, equivocado o ya usado, y el tiempo de respuesta no depende de si el email existe.
+- Cambiar la contraseña o generar códigos nuevos pide la contraseña actual. Cambiar o recuperar la contraseña cierra todas las sesiones.
+- Límite de 5 intentos cada 15 minutos por IP en login, alta y recuperación, y por cuenta en los cambios desde el panel.
+
 **Riesgos aceptados por el dueño:**
 
 - **Metadatos de las fotos de regalos** (por ejemplo, GPS): no se borran. Las fotos se descargan de las tiendas, no se sacan en casa.

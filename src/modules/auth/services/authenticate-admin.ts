@@ -2,11 +2,14 @@ import type { PrismaClient } from "@/generated/prisma/client";
 import { consumeRateLimit, resetRateLimit } from "@/lib/rate-limit";
 import {
   LOGIN_RATE_LIMIT,
-  loginRateLimitKeys,
+  loginRateLimitKey,
 } from "@/modules/auth/domain/login-rules";
 import { findAdminUserByEmail } from "@/modules/auth/repositories/admin-user-repository";
 import { credentialsSchema } from "@/modules/auth/schemas/credentials";
-import { hashPassword, verifyPassword } from "@/modules/auth/services/password";
+import {
+  getDummyPasswordHash,
+  verifyPassword,
+} from "@/modules/auth/services/password";
 
 export type AuthenticatedAdmin = {
   id: string;
@@ -18,46 +21,29 @@ export type AuthenticationResult =
   | { ok: true; admin: AuthenticatedAdmin }
   | { ok: false; reason: "invalid_credentials" | "rate_limited" };
 
-const UNKNOWN_EMAIL_KEY = "invalid-input";
-
-let dummyHashPromise: Promise<string> | undefined;
-
-// Verifying against a dummy hash when the user does not exist keeps response
-// times similar, so attackers cannot discover which emails are registered.
-function getDummyHash(): Promise<string> {
-  dummyHashPromise ??= hashPassword("dummy-password-for-timing-equalization");
-  return dummyHashPromise;
-}
-
 export async function authenticateAdmin(
   db: PrismaClient,
   rawCredentials: unknown,
   clientIp: string,
 ): Promise<AuthenticationResult> {
   const parsed = credentialsSchema.safeParse(rawCredentials);
-  const email = parsed.success ? parsed.data.email : UNKNOWN_EMAIL_KEY;
-  const keys = loginRateLimitKeys(clientIp, email);
+  const ipKey = loginRateLimitKey(clientIp);
 
-  const [ipLimit, emailLimit] = await Promise.all([
-    consumeRateLimit(db, keys.byIp, LOGIN_RATE_LIMIT),
-    consumeRateLimit(db, keys.byEmail, LOGIN_RATE_LIMIT),
-  ]);
-  if (!ipLimit.allowed || !emailLimit.allowed)
-    return { ok: false, reason: "rate_limited" };
+  // Phase 7c, answer 3: only the connection that keeps failing is blocked;
+  // nobody can lock the parents out just by knowing their email.
+  const ipLimit = await consumeRateLimit(db, ipKey, LOGIN_RATE_LIMIT);
+  if (!ipLimit.allowed) return { ok: false, reason: "rate_limited" };
   if (!parsed.success) return { ok: false, reason: "invalid_credentials" };
 
   const user = await findAdminUserByEmail(db, parsed.data.email);
   const passwordMatches = await verifyPassword(
-    user?.passwordHash ?? (await getDummyHash()),
+    user?.passwordHash ?? (await getDummyPasswordHash()),
     parsed.data.password,
   );
   if (!user || !passwordMatches)
     return { ok: false, reason: "invalid_credentials" };
 
-  await Promise.all([
-    resetRateLimit(db, keys.byIp),
-    resetRateLimit(db, keys.byEmail),
-  ]);
+  await resetRateLimit(db, ipKey);
   return {
     ok: true,
     admin: {

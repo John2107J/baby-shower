@@ -51,6 +51,14 @@ export default async function AdminHomePage() {
             Aportes y regalos elegidos
           </Link>
         </li>
+        <li>
+          <Link
+            href={ADMIN_ROUTES.account}
+            className="underline underline-offset-4"
+          >
+            Cuenta y contraseña
+          </Link>
+        </li>
       </ul>
     </section>
   );

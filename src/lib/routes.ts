@@ -1,6 +1,9 @@
 export const ADMIN_ROUTES = {
   home: "/admin",
   login: "/admin/login",
+  setupAccount: "/admin/crear-cuenta",
+  recoverPassword: "/admin/recuperar",
+  account: "/admin/cuenta",
   event: "/admin/evento",
   gifts: "/admin/regalos",
   newGift: "/admin/regalos/nuevo",

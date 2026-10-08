@@ -60,5 +60,10 @@ GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cad
 - `/admin/aportes`: resumen de lo confirmado y lo pendiente, lista de aportes (quién, cuánto, regalo, estado) con confirmar, editar monto y anular, y quién eligió "Yo lo llevo" en cada regalo, con opción de anular.
 - Fotos: en producción se guardan en Vercel Blob (Vercel crea `BLOB_STORE_ID` al conectar el Blob Store; los stores viejos usan `BLOB_READ_WRITE_TOKEN`). En desarrollo, sin esas variables, se guardan en `.dev-uploads/`.
 
-- Una cuenta compartida. Se crea o se resetea la contraseña con `npm run admin:set-password -- <email>` (la contraseña se escribe oculta, mínimo 12 caracteres). No hay registro público ni recuperación por email.
+- **Una cuenta compartida** (papá y mamá), sin registro público ni emails:
+  - **Crear la cuenta:** `/admin/crear-cuenta`, con el código de alta `ADMIN_SETUP_CODE` (variable de entorno, mínimo 16 caracteres). Funciona solo mientras no exista ninguna cuenta; después responde "no encontrada".
+  - **Códigos de recuperación:** 8 códigos de un solo uso, que se muestran una única vez al crear la cuenta o desde **Cuenta → Generar códigos nuevos**.
+  - **Recuperar la contraseña:** `/admin/recuperar` (link "¿Olvidaste tu contraseña?" en el login), con email, un código y la contraseña nueva.
+  - **Cambiar la contraseña:** desde **Cuenta**. Cambiar o recuperar la contraseña cierra todas las sesiones.
+  - **Último recurso:** `npm run admin:set-password -- <email>` crea la cuenta o resetea la contraseña desde la terminal.
 - Login en `/admin/login`. Sesión de 8 horas. Bloqueo de 15 minutos tras 5 intentos fallidos (por IP y por email).
