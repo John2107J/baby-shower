@@ -3,11 +3,12 @@ import Credentials from "next-auth/providers/credentials";
 import { getClientIp } from "@/lib/client-ip";
 import { getDb } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { ADMIN_ROUTES } from "@/lib/routes";
 import { ADMIN_SESSION_MAX_AGE_SECONDS } from "@/modules/auth/domain/login-rules";
 import { authenticateAdmin } from "@/modules/auth/services/authenticate-admin";
 
-export const ADMIN_LOGIN_PATH = "/admin/login";
-export const ADMIN_HOME_PATH = "/admin";
+export const ADMIN_LOGIN_PATH = ADMIN_ROUTES.login;
+export const ADMIN_HOME_PATH = ADMIN_ROUTES.home;
 
 export const RATE_LIMITED_CODE = "rate_limited";
 

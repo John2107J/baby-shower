@@ -238,7 +238,7 @@ Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grup
 5. **RSVP:** ¿máximo de asistentes = cantidad de nombres de la invitación? ¿Hasta qué fecha se puede modificar la respuesta?
 6. ~~**Panel de padres:**~~ → **Resuelto** (ver sección 12).
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
-8. **Dominio:** ¿se usará dominio propio o el de Vercel?
+8. ~~**Dominio:**~~ → **Resuelto: dominio gratuito de Vercel** (ver sección 12).
 9. **Diseño:** estilo visual, paleta de colores, tipografías, y foto/ilustración para la invitación. *No inventar: pedir referencias.*
 10. **Textos de la invitación** (saludo, fórmulas, mensajes de WhatsApp y Gmail): los redacta el dueño o se proponen para su aprobación.
 11. ~~**Hash de contraseñas** y **rate limiting**~~ → **Resuelto** (ver sección 12).
@@ -291,6 +291,14 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 15 | Conexión a la base | **Prisma 7 + `@prisma/adapter-pg`** (funciona igual con Neon y con el Postgres del CI). |
 | 16 | Token de invitación | Se guarda **tal cual** en la base (solo accesible desde el servidor) para que el panel pueda volver a mostrar y copiar los links. |
 | 17 | Modelo de datos | Aprobado: incluye `venueName`, borrado lógico de regalos (`archivedAt`), montos en centavos `Int`, claves de idempotencia en reservas/aportes y restricciones CHECK en la base. |
+| 18 | Dominio | **Dominio gratuito de Vercel** (`*.vercel.app`). Definir el nombre final antes de enviar links: si cambia, los links viejos dejan de funcionar. |
+| 19 | Fase 3 en PRs | Se divide en tres PRs: 3a datos del evento, 3b regalos (con Vercel Blob), 3c invitaciones. |
+| 20 | Panel | Simple y funcional, mobile-first, con la paleta de los padres aplicada de forma sobria. El diseño cuidado es para la invitación pública. |
+| 21 | Fotos de regalos | Máx. **4 MB**; **JPG, PNG o WebP**; tipo real validado por sus primeros bytes; **sin redimensionar** (sin `sharp`); URL pública con nombre aleatorio. |
+| 22 | Edición de regalos | No se puede bajar la cantidad por debajo de lo reservado. Cambiar el precio con aportes existentes se permite con advertencia. Archivar oculta el regalo al público y conserva el historial. Orden con botones ↑ ↓. |
+| 23 | Invitaciones | Se pueden editar los nombres (el link no cambia). Solo se borran si no tienen confirmación, reservas ni aportes. Existe "Regenerar link" (invalida el anterior). Token de 256 bits. |
+| 24 | Datos de pago | Alias según reglas BCRA (6–20 caracteres: letras, números, `.` y `-`). CBU/CVU de 22 dígitos con verificación de ambos dígitos verificadores. |
+| 25 | Evento único | Fila única con id fijo (upsert atómico): nunca puede haber dos eventos. Las coordenadas GPS no se cargan desde el panel; el botón "Cómo llegar" usa el link de Google Maps. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)
