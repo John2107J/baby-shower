@@ -84,6 +84,8 @@ model GiftClaim {
   /// Client-generated key that makes retries and double clicks idempotent.
   idempotencyKey String     @unique
   createdAt      DateTime   @default(now()) @db.Timestamptz(3)
+  /// Set when the parents cancel the reservation (decision 45); kept for history.
+  voidedAt       DateTime?  @db.Timestamptz(3)
   gift           Gift       @relation(fields: [giftId], references: [id], onDelete: Restrict)
   invitation     Invitation @relation(fields: [invitationId], references: [id], onDelete: Restrict)
 

@@ -49,7 +49,7 @@ async function claimedUnitsByGift(
 ) {
   const rows = await db.giftClaim.groupBy({
     by: ["giftId"],
-    where: { giftId: { in: giftIds } },
+    where: { giftId: { in: giftIds }, voidedAt: null },
     _sum: { units: true },
   });
   return new Map(rows.map((row) => [row.giftId, row._sum.units ?? 0]));

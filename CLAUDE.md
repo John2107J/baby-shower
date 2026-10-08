@@ -302,11 +302,11 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 26 | Almacenamiento local de fotos | Sin credenciales de Blob (`BLOB_STORE_ID` en stores nuevos, `BLOB_READ_WRITE_TOKEN` en viejos), en desarrollo las fotos se guardan en `.dev-uploads/` (ignorado por Git) y se sirven por `/api/dev-uploads`, que en producción responde 404. En producción sin credenciales, falla con error. |
 | 27 | ~~Nombres vs. confirmados~~ | **Reemplazada por la 28**: los asistentes ya no dependen de la cantidad de nombres. |
 | 28 | Asistentes | Los elige el invitado: de **1 a 6** por invitación, sin importar cuántos nombres tenga (permite "Familia Pérez"). La base exige coherencia: sin respuesta → sin número; no asiste → 0; asiste → 1 a 6. |
-| 29 | Plazo del RSVP | Se puede responder y cambiar hasta las **23:59 del día anterior** al evento (hora Argentina). Después se **cierra para todos**, incluso para quien nunca respondió, con el mensaje "La confirmación ya cerró. Si necesitás avisar algo, escribile directamente a los papás." |
+| 29 | Plazo del RSVP | *(Actualizada en la Fase 5)* Se puede responder y cambiar **hasta que empieza el evento** (hora Argentina). Después se **cierra para todos**, incluso para quien nunca respondió, con el mensaje "La confirmación ya cerró. Si necesitás avisar algo, escribile directamente a los papás." |
 | 30 | Límites del público | **20 links inválidos por IP en 10 min** → esa IP ve "no encontrada" durante 10 min (aunque use un link válido). Cada invitación puede **cambiar su respuesta 10 veces cada 10 min**. |
 | 31 | Tipografías | **Allura** (nombre de la bebé) y **Quicksand** (textos), alojadas en el propio sitio con `next/font`. |
 | 32 | Invitación pública | Diseño aprobado del prototipo: moño en acuarela dibujado en SVG, flores silvestres primaverales, nombres de los invitados arriba. Animaciones: al confirmar "sí" saltan moñitos; al "no" el moño se desata. Mensajes: "¡Qué alegría! Los esperamos." / "😢 Gracias por avisar". |
-| 33 | Lista de regalos en la invitación | El botón "Ver lista de regalos" no se muestra hasta la Fase 5. |
+| 33 | Lista de regalos en la invitación | Desde la Fase 5, debajo de la confirmación: "Si no sabés qué regalarme, mis papis hicieron una lista con cosas que voy a necesitar" y el botón "Ver lista de regalos" (`/i/<token>/regalos`). |
 | 34 | Vista previa (WhatsApp) | Moño de fondo, título "Baby Shower de &lt;nombre de la bebé&gt;" y descripción "Tenés una invitación 💌". Sin nombres de invitados, fecha ni dirección. La imagen no depende del link (es igual para cualquier token). Solo los bots de vista previa (WhatsApp, Facebook, Telegram, Twitter) pueden leer `/i/` según `robots.txt`; nada se indexa (`X-Robots-Tag: noindex`). |
 | 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero, con la fecha de cada respuesta. |
 | 36 | Página principal | Quien entra sin link ve solo el moño, las flores y "Esta invitación es personal. Usá el link que te enviaron." Sin datos del evento. |
@@ -320,6 +320,13 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 44 | "Yo lo llevo" | Reserva directa, **sin confirmación** de los padres. |
 | 45 | Deshacer | **Solo los padres** pueden anular un aporte o un "Yo lo llevo" (desde el panel). El invitado no puede deshacer lo que eligió. |
 | 46 | Panel "Aportes" | Lista de aportes (quién, cuánto, regalo, estado) con **confirmar, editar monto y anular**, y quién eligió "Yo lo llevo" en cada regalo (con opción de anular). |
+| 47 | Aportes pendientes y "Yo lo llevo" | Un aporte **pendiente** también bloquea "Yo lo llevo" en esa unidad, hasta que los padres lo anulen. |
+| 48 | Pendientes que cubren lo que falta | Barra con lo confirmado, leyenda "Aportes esperando confirmación" y botones desactivados. Pasa a "Completo" cuando los padres confirman. |
+| 49 | Lo que eligió el invitado | Cada invitado ve **solo lo suyo**: qué regalo lleva y qué aportó (monto, regalo y si está confirmado). |
+| 50 | Cierre de la lista | La lista de regalos cierra **cuando empieza el evento**, igual que la confirmación de asistencia. |
+| 51 | Editar montos (panel) | Al editar un aporte, los padres también respetan el tope del regalo. |
+| 52 | Límites de la lista | Aportes sin límite de cantidad, pero **3 minutos entre aportes guardados** de la misma invitación (un monto mal escrito no bloquea). Además, 20 intentos por invitación cada 10 minutos. |
+| 53 | Textos de la lista | "¡Gracias! Anotamos que llevás este regalo." / "¡Gracias! Los papás van a confirmar tu aporte." / "Completo". |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

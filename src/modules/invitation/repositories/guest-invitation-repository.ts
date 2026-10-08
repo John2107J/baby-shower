@@ -16,3 +16,15 @@ export function findInvitationByToken(
     select: { guestNames: true, rsvpStatus: true, rsvpAttendeesCount: true },
   });
 }
+
+/** Server-side only: the id links a guest's claims and contributions to their invitation. */
+export async function findInvitationIdByToken(
+  db: PrismaClient,
+  token: string,
+): Promise<string | null> {
+  const invitation = await db.invitation.findUnique({
+    where: { token },
+    select: { id: true },
+  });
+  return invitation?.id ?? null;
+}

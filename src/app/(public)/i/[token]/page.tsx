@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Bow } from "@/components/invitation/bow";
 import { InvitationCard } from "@/components/invitation/invitation-card";
@@ -8,6 +9,7 @@ import { RsvpForm } from "@/components/invitation/rsvp-form";
 import { WatercolorDefs } from "@/components/invitation/watercolor-defs";
 import { getClientIp } from "@/lib/client-ip";
 import { getDb } from "@/lib/db";
+import { GUEST_ROUTES } from "@/lib/routes";
 import { findEvent } from "@/modules/event/repositories/event-repository";
 import { getGuestInvitation } from "@/modules/invitation/services/guest-invitation-service";
 import { submitRsvpAction } from "@/modules/rsvp/services/rsvp-actions";
@@ -135,6 +137,19 @@ export default async function InvitationPage({
         deadlineLabel={invitation.rsvpDeadlineLabel}
         maxAttendees={invitation.maxAttendees}
       />
+
+      <div className="flex flex-col items-center gap-3.5">
+        <p className="text-balance">
+          Si no sabés qué regalarme, mis papis hicieron una lista con cosas que
+          voy a necesitar
+        </p>
+        <Link
+          href={GUEST_ROUTES.gifts(token)}
+          className="bg-rose text-paper px-6 py-2.5 font-semibold tracking-[0.08em]"
+        >
+          Ver lista de regalos
+        </Link>
+      </div>
 
       <Meadow />
     </InvitationCard>
