@@ -39,3 +39,7 @@ next-env.d.ts
 prisma/seed.local.*
 src/generated/
 .dev-uploads/
+# Post-event summaries contain real guest data (never commit)
+exports/
+# Database backups contain real data (never commit)
+backups/

@@ -14,6 +14,13 @@ Este repositorio es **público**. Nunca se commitean secretos, archivos `.env` n
 
 Cabeceras, CSP con nonce y estado de `npm audit`: ver [`docs/seguridad.md`](docs/seguridad.md).
 
+## Documentación
+
+- [`docs/manual-papas.md`](docs/manual-papas.md): cómo usar el panel, enviar las invitaciones y confirmar aportes.
+- [`docs/manual-tecnico.md`](docs/manual-tecnico.md): puesta en marcha, producción, migraciones, pruebas de carga, respaldos y pasos después del evento.
+- [`docs/pruebas-celulares.md`](docs/pruebas-celulares.md): lista de pruebas en celulares reales (WhatsApp, iPhone, Android).
+- [`docs/seguridad.md`](docs/seguridad.md): medidas de seguridad, revisión y riesgos aceptados.
+
 ## Requisitos
 
 - Node.js 24 (ver `.nvmrc`)
