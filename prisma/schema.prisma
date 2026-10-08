@@ -122,6 +122,8 @@ model AdminUser {
   id           String   @id @default(uuid()) @db.Uuid
   email        String   @unique
   passwordHash String
+  /// Increases on every password change; sessions opened with an older value stop working.
+  sessionVersion Int    @default(0)
   createdAt    DateTime @default(now()) @db.Timestamptz(3)
   updatedAt    DateTime @updatedAt @db.Timestamptz(3)
 }

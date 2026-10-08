@@ -283,7 +283,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 6 | Flujo Git | `main` creada con un commit inicial (autorizado por el dueño). El resto entra por rama de trabajo + Pull Request. Claude opera GitHub informando cada acción (crear rama, commit, push, PR). |
 | 7 | Node | **Node 24** (el dueño usa 24.14.0); fijado en `.nvmrc`, `engines` y CI. |
 | 9 | Gestor de paquetes / TypeScript / ESLint | **npm**; **TypeScript 5.9** (no 7.x hasta que el ecosistema lo soporte); **ESLint 9** hasta que `eslint-config-next` soporte la 10. |
-| 10 | `npm audit` | Las vulnerabilidades de la cadena de lint (`braces`, solo desarrollo) se aceptan y se revisan en la Fase 7. |
+| 10 | `npm audit` | *(Revisada en la Fase 7)* Se aceptan las vulnerabilidades de la cadena de lint (`braces`) y del CLI de Prisma (`mysql2`, `deepmerge-ts`): no llegan al código publicado. Detalle en `docs/seguridad.md`. Se vuelve a revisar antes de enviar las invitaciones. |
 | 11 | Panel de padres | **Una cuenta compartida.** Alta y reseteo de contraseña con `npm run admin:set-password` (sin registro público ni emails). |
 | 12 | Contraseñas | **argon2id** (`@node-rs/argon2`, parámetros OWASP). Mínimo 12 caracteres. |
 | 13 | Rate limiting | **En la base (Neon)**, ventana fija con UPSERT atómico; claves guardadas como hash SHA-256. Login: **5 intentos / 15 min por IP y por email**. |
@@ -336,6 +336,10 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 60 | Contactos | **No se guardan teléfonos ni mails** de invitados: WhatsApp (`wa.me` sin número) y el mail se abren sin destinatario. |
 | 61 | Botón Gmail | En computadora abre Gmail web; en el celular (pantalla táctil) abre la app de correo con `mailto:`. |
 | 62 | Marca "enviada" | Al tocar WhatsApp o Gmail, la invitación queda "Enviada por WhatsApp" o "Enviada por mail" (registra el botón, no que el mensaje salió). Regenerar el link la vuelve a "Sin enviar". |
+| 63 | CSP | **Con nonce** por respuesta (`src/proxy.ts`); todas las páginas se generan en cada visita. Estilos *inline* permitidos. |
+| 64 | Sesiones del panel | Cambiar la contraseña cierra todas las sesiones abiertas (`AdminUser.sessionVersion`). |
+| 65 | Tabla de límites | Se limpia sola (registros de más de un día). |
+| 66 | Riesgos aceptados (Fase 7) | Metadatos de fotos, montos deducibles, optimizador con cualquier Blob, IP confiable solo en Vercel. Detalle en `docs/seguridad.md`. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

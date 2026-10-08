@@ -2,22 +2,43 @@ export type SecurityHeader = { key: string; value: string };
 
 const TWO_YEARS_IN_SECONDS = 63_072_000;
 
+export const CONTENT_SECURITY_POLICY = "Content-Security-Policy";
+
 export const VERCEL_BLOB_HOST_PATTERN =
   "https://*.public.blob.vercel-storage.com";
 
-export function buildContentSecurityPolicy(isDevelopment: boolean): string {
-  // Next.js injects inline bootstrap scripts, so 'unsafe-inline' is required
-  // until nonce-based CSP is adopted (planned for the hardening phase).
-  // React's dev tooling additionally needs 'unsafe-eval', only in development.
+const NONCE_BYTES = 16;
+
+/** Fresh, unpredictable value for each response (128 bits from the CSPRNG). */
+export function generateCspNonce(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(NONCE_BYTES));
+  return btoa(String.fromCharCode(...bytes));
+}
+
+/**
+ * Scripts run only with this response's nonce, which Next.js adds to its own
+ * scripts ('strict-dynamic' lets those load the page's bundles). React's dev
+ * tooling additionally needs 'unsafe-eval', only in development.
+ */
+export function buildContentSecurityPolicy({
+  isDevelopment,
+  nonce,
+}: {
+  isDevelopment: boolean;
+  nonce: string;
+}): string {
   const scriptSrc = [
     "'self'",
-    "'unsafe-inline'",
+    `'nonce-${nonce}'`,
+    "'strict-dynamic'",
     ...(isDevelopment ? ["'unsafe-eval'"] : []),
   ];
 
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
     "script-src": scriptSrc,
+    // Inline styles stay allowed: the pages use style attributes (progress
+    // bars, animations). Styles cannot run code, so the risk is low.
     "style-src": ["'self'", "'unsafe-inline'"],
     // Gift photos are served from Vercel Blob (decision 21).
     "img-src": ["'self'", "data:", "blob:", VERCEL_BLOB_HOST_PATTERN],
@@ -36,12 +57,9 @@ export function buildContentSecurityPolicy(isDevelopment: boolean): string {
   return policy.join("; ");
 }
 
-export function buildSecurityHeaders(isDevelopment: boolean): SecurityHeader[] {
+/** Headers that are the same on every response. The CSP is set per request in src/proxy.ts. */
+export function buildSecurityHeaders(): SecurityHeader[] {
   return [
-    {
-      key: "Content-Security-Policy",
-      value: buildContentSecurityPolicy(isDevelopment),
-    },
     {
       key: "Strict-Transport-Security",
       value: `max-age=${TWO_YEARS_IN_SECONDS}; includeSubDomains`,

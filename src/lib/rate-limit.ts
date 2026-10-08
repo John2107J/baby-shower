@@ -12,6 +12,11 @@ export type RateLimitResult = {
   retryAfterMs: number;
 };
 
+/** Every rule's window is far shorter: rows older than this are dead weight. */
+export const STALE_BUCKET_AGE_MS = 24 * 60 * 60 * 1000;
+/** About 1 in 100 hits also cleans the table, so it cannot grow forever (phase 7 review). */
+const PURGE_PROBABILITY = 0.01;
+
 // Keys may contain personal data (emails, IPs); only their hash is stored.
 export function hashRateLimitKey(key: string): string {
   return createHash("sha256").update(key).digest("hex");
@@ -26,7 +31,9 @@ export async function consumeRateLimit(
   key: string,
   rule: RateLimitRule,
   now: Date = new Date(),
+  shouldPurge: () => boolean = () => Math.random() < PURGE_PROBABILITY,
 ): Promise<RateLimitResult> {
+  if (shouldPurge()) await purgeStaleRateLimits(db, now);
   const windowThreshold = new Date(now.getTime() - rule.windowMs);
   const rows = await db.$queryRaw<{ count: number; windowStart: Date }[]>`
     INSERT INTO "RateLimitBucket" ("key", "windowStart", "count")
@@ -71,4 +78,16 @@ export async function resetRateLimit(
   await db.rateLimitBucket.deleteMany({
     where: { key: hashRateLimitKey(key) },
   });
+}
+
+export async function purgeStaleRateLimits(
+  db: PrismaClient,
+  now: Date = new Date(),
+): Promise<number> {
+  const result = await db.rateLimitBucket.deleteMany({
+    where: {
+      windowStart: { lt: new Date(now.getTime() - STALE_BUCKET_AGE_MS) },
+    },
+  });
+  return result.count;
 }
