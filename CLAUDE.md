@@ -240,7 +240,7 @@ Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grup
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
 8. ~~**Dominio:**~~ → **Resuelto: dominio gratuito de Vercel** (ver sección 12).
 9. **Diseño:** estilo visual, paleta de colores, tipografías, y foto/ilustración para la invitación. *No inventar: pedir referencias.*
-10. **Textos de la invitación** (saludo, fórmulas, mensajes de WhatsApp y Gmail): los redacta el dueño o se proponen para su aprobación.
+10. ~~**Textos de la invitación** (saludo, fórmulas, mensajes de WhatsApp y Gmail)~~ → **Resuelto** (decisiones 32, 53 y 59).
 11. ~~**Hash de contraseñas** y **rate limiting**~~ → **Resuelto** (ver sección 12).
 12. **Datos reales** del evento: nombre de la bebé, fecha, hora, dirección, alias/CBU. Pedirlos; no usar datos inventados fuera de entornos de prueba claramente marcados.
 
@@ -332,6 +332,10 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 56 | Confirmado | Un aporte confirmado **no vuelve a pendiente**: se edita el monto o se anula. |
 | 57 | Regalos archivados en "Aportes" | Sus aportes y reservas se siguen mostrando y gestionando, marcados "(regalo archivado)". |
 | 58 | Después del cierre | Los padres pueden confirmar, editar y anular sin límite de fecha; los invitados ya no pueden aportar ni reservar. |
+| 59 | Mensaje para compartir | Igual para WhatsApp y mail. Asunto: "Invitación al Baby Shower de {bebé}". Cuerpo: "¡Hola, {nombres}!" / "Esta es la invitación al Baby Shower de {bebé}. En este link podés confirmar asistencia y ver la lista de regalos:" / {link}. |
+| 60 | Contactos | **No se guardan teléfonos ni mails** de invitados: WhatsApp (`wa.me` sin número) y el mail se abren sin destinatario. |
+| 61 | Botón Gmail | En computadora abre Gmail web; en el celular (pantalla táctil) abre la app de correo con `mailto:`. |
+| 62 | Marca "enviada" | Al tocar WhatsApp o Gmail, la invitación queda "Enviada por WhatsApp" o "Enviada por mail" (registra el botón, no que el mensaje salió). Regenerar el link la vuelve a "Sin enviar". |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

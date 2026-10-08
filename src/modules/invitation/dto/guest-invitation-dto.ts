@@ -1,4 +1,5 @@
 import { EVENT_TIME_ZONE } from "@/lib/time-zone";
+import { formatGuestNames } from "@/modules/invitation/domain/invitation-rules";
 import type { EventRecord } from "@/modules/event/repositories/event-repository";
 import type { GuestInvitationRecord } from "@/modules/invitation/repositories/guest-invitation-repository";
 import {
@@ -63,10 +64,7 @@ export function toGuestInvitationView(
 ): GuestInvitationView {
   const lastDay = new Date(rsvpClosesAt(event.startsAt).getTime() - 1);
   return {
-    guestNamesLabel: new Intl.ListFormat("es", {
-      style: "long",
-      type: "conjunction",
-    }).format(invitation.guestNames),
+    guestNamesLabel: formatGuestNames(invitation.guestNames),
     babyName: event.babyName,
     weekday: capitalize(part(event.startsAt, { weekday: "long" })),
     dayOfMonth: part(event.startsAt, { day: "numeric" }),

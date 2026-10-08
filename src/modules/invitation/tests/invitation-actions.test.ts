@@ -6,6 +6,7 @@ const service = {
   updateInvitationFromForm: vi.fn(),
   regenerateInvitationLink: vi.fn(),
   deleteInvitation: vi.fn(),
+  markInvitationAsSent: vi.fn(),
 };
 
 vi.mock("@/modules/auth/services/require-admin", () => ({
@@ -38,6 +39,7 @@ describe("invitation actions require an admin session", () => {
     ],
     ["regenerate", () => actions.regenerateInvitationLinkAction("id")],
     ["delete", () => actions.deleteInvitationAction("id", IDLE)],
+    ["mark sent", () => actions.markInvitationSentAction("id", "WHATSAPP")],
   ])("%s", async (_name, run) => {
     await expect(run()).rejects.toThrow("REDIRECT:/admin/login");
     for (const fn of Object.values(service)) expect(fn).not.toHaveBeenCalled();

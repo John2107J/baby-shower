@@ -1,4 +1,8 @@
-import type { PrismaClient, RsvpStatus } from "@/generated/prisma/client";
+import type {
+  PrismaClient,
+  RsvpStatus,
+  SentVia,
+} from "@/generated/prisma/client";
 
 export type AdminInvitationRecord = {
   id: string;
@@ -6,6 +10,7 @@ export type AdminInvitationRecord = {
   guestNames: string[];
   rsvpStatus: RsvpStatus;
   rsvpAttendeesCount: number | null;
+  sentVia: SentVia | null;
   hasActivity: boolean;
 };
 
@@ -29,6 +34,7 @@ const INVITATION_SELECT = {
   guestNames: true,
   rsvpStatus: true,
   rsvpAttendeesCount: true,
+  sentVia: true,
   _count: { select: { claims: true, contributions: true } },
 } as const;
 
@@ -38,6 +44,7 @@ type InvitationRow = {
   guestNames: string[];
   rsvpStatus: RsvpStatus;
   rsvpAttendeesCount: number | null;
+  sentVia: SentVia | null;
   _count: { claims: number; contributions: number };
 };
 
@@ -97,6 +104,7 @@ export async function updateInvitationNames(
   if (result.count === 0) throw new InvitationNotFoundError();
 }
 
+/** The new link has not been sent yet, so the "sent" mark is cleared. */
 export async function replaceInvitationToken(
   db: PrismaClient,
   id: string,
@@ -104,7 +112,20 @@ export async function replaceInvitationToken(
 ): Promise<boolean> {
   const result = await db.invitation.updateMany({
     where: { id },
-    data: { token },
+    data: { token, sentVia: null },
+  });
+  return result.count === 1;
+}
+
+/** Phase 6, answer 4: records which button the parents used last. */
+export async function markInvitationSent(
+  db: PrismaClient,
+  id: string,
+  sentVia: SentVia,
+): Promise<boolean> {
+  const result = await db.invitation.updateMany({
+    where: { id },
+    data: { sentVia },
   });
   return result.count === 1;
 }

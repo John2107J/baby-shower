@@ -13,6 +13,7 @@ import {
   deleteInvitation,
   regenerateInvitationLink,
   updateInvitationFromForm,
+  markInvitationAsSent,
 } from "@/modules/invitation/services/invitation-service";
 
 // Submitted names travel back so React's form reset does not wipe them.
@@ -71,6 +72,23 @@ export async function regenerateInvitationLinkAction(
 ): Promise<void> {
   await requireAdmin();
   await regenerateInvitationLink(getDb(), invitationId);
+  revalidatePath(ADMIN_ROUTES.invitations);
+}
+
+export async function markInvitationSentAction(
+  invitationId: string,
+  via: string,
+): Promise<void> {
+  await requireAdmin();
+  try {
+    await markInvitationAsSent(getDb(), invitationId, via);
+  } catch (error) {
+    // Only a convenience mark: the message was already opened, so nothing is shown.
+    logger.error("invitation sent mark failed", {
+      errorName: error instanceof Error ? error.name : "unknown",
+    });
+    return;
+  }
   revalidatePath(ADMIN_ROUTES.invitations);
 }
 
