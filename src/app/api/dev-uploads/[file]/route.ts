@@ -1,3 +1,4 @@
+import { hasBlobCredentials } from "@/lib/image-storage";
 import { readDevUpload } from "@/lib/image-storage/dev-file-storage";
 
 const CONTENT_TYPES: Record<string, string> = {
@@ -11,10 +12,7 @@ export async function GET(
   _request: Request,
   context: { params: Promise<{ file: string }> },
 ) {
-  if (
-    process.env.NODE_ENV === "production" ||
-    process.env["BLOB_READ_WRITE_TOKEN"]
-  ) {
+  if (process.env.NODE_ENV === "production" || hasBlobCredentials()) {
     return new Response(null, { status: 404 });
   }
   const { file } = await context.params;

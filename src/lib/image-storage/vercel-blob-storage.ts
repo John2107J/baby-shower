@@ -1,7 +1,7 @@
 import { del, put } from "@vercel/blob";
 import type { ImageStorage } from "@/lib/image-storage/image-storage";
 
-/** Uses BLOB_READ_WRITE_TOKEN, which Vercel sets when the Blob store is connected. */
+/** Credentials are resolved by @vercel/blob (BLOB_STORE_ID + OIDC, or BLOB_READ_WRITE_TOKEN). */
 export const vercelBlobStorage: ImageStorage = {
   async upload(pathname, bytes, mimeType) {
     const blob = await put(pathname, Buffer.from(bytes), {

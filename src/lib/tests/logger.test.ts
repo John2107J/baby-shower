@@ -16,6 +16,19 @@ describe("redact", () => {
     expect(redact({ [key]: "sensitive" })[key]).toBe(REDACTED);
   });
 
+  it("keeps errorName so production errors can be diagnosed", () => {
+    expect(redact({ errorName: "BlobAccessError" })).toEqual({
+      errorName: "BlobAccessError",
+    });
+  });
+
+  it.each(["name", "babyName", "holderName", "errorNameAndEmail"])(
+    "still redacts other keys containing 'name' (%s)",
+    (key) => {
+      expect(redact({ [key]: "x" })[key]).toBe(REDACTED);
+    },
+  );
+
   it("keeps non-sensitive keys", () => {
     expect(redact({ giftId: "g1", attempt: 2 })).toEqual({
       giftId: "g1",
