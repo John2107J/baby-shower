@@ -327,6 +327,11 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 51 | Editar montos (panel) | Al editar un aporte, los padres también respetan el tope del regalo. |
 | 52 | Límites de la lista | Aportes sin límite de cantidad, pero **3 minutos entre aportes guardados** de la misma invitación (un monto mal escrito no bloquea). Además, 20 intentos por invitación cada 10 minutos. |
 | 53 | Textos de la lista | "¡Gracias! Anotamos que llevás este regalo." / "¡Gracias! Los papás van a confirmar tu aporte." / "Completo", y los demás textos de `src/components/gifts/gift-list-texts.ts`, aprobados por el dueño. |
+| 54 | Editar aportes (padres) | Los padres pueden poner **cualquier monto mayor a $0** (el mínimo de $1.000 es solo para los invitados), hasta lo que falta para completar el regalo. El estado se mantiene. |
+| 55 | Anular | Anular un aporte o un "Yo lo llevo" es **definitivo**, con confirmación previa. Al anular un "Yo lo llevo" la unidad vuelve a quedar libre. |
+| 56 | Confirmado | Un aporte confirmado **no vuelve a pendiente**: se edita el monto o se anula. |
+| 57 | Regalos archivados en "Aportes" | Sus aportes y reservas se siguen mostrando y gestionando, marcados "(regalo archivado)". |
+| 58 | Después del cierre | Los padres pueden confirmar, editar y anular sin límite de fecha; los invitados ya no pueden aportar ni reservar. |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

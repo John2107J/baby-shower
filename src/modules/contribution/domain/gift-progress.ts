@@ -83,3 +83,13 @@ export function checkContributionAmount(
   if (amountCents > max) return { ok: false, reason: "above_maximum" };
   return { ok: true };
 }
+
+/**
+ * Decision 51 and owner's answer 1 in phase 5b: the parents may set any
+ * positive amount (no $1.000 minimum), up to what the gift still needs
+ * without counting the contribution being edited.
+ */
+export function maxAmountForEdit(othersOnly: GiftCommitments): number {
+  const progress = computeGiftProgress(othersOnly);
+  return progress.state === "complete" ? 0 : progress.maxContributionCents;
+}

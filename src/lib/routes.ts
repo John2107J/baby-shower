@@ -9,6 +9,7 @@ export const ADMIN_ROUTES = {
   newInvitation: "/admin/invitaciones/nueva",
   editInvitation: (id: string) => `/admin/invitaciones/${id}`,
   confirmations: "/admin/confirmaciones",
+  contributions: "/admin/aportes",
 } as const;
 
 export const GUEST_ROUTES = {

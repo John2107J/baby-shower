@@ -55,6 +55,7 @@ GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cad
 - `/admin/evento`: datos del evento. `/admin/regalos`: lista de regalos con foto, link de la tienda, precio y cantidad.
 - `/admin/confirmaciones`: cuántas personas vienen, cuántas invitaciones no vienen y cuántas faltan responder, con la lista (pendientes primero).
 - `/admin/invitaciones`: invitaciones de 1 a 5 nombres con su link personal (`/i/<token>`, 256 bits), copiar link, editar nombres, regenerar link y borrar (solo sin actividad). En Vercel los links usan el dominio de producción (`VERCEL_PROJECT_PRODUCTION_URL`).
+- `/admin/aportes`: resumen de lo confirmado y lo pendiente, lista de aportes (quién, cuánto, regalo, estado) con confirmar, editar monto y anular, y quién eligió "Yo lo llevo" en cada regalo, con opción de anular.
 - Fotos: en producción se guardan en Vercel Blob (Vercel crea `BLOB_STORE_ID` al conectar el Blob Store; los stores viejos usan `BLOB_READ_WRITE_TOKEN`). En desarrollo, sin esas variables, se guardan en `.dev-uploads/`.
 
 - Una cuenta compartida. Se crea o se resetea la contraseña con `npm run admin:set-password -- <email>` (la contraseña se escribe oculta, mínimo 12 caracteres). No hay registro público ni recuperación por email.
