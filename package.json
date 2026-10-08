@@ -21,7 +21,10 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "admin:set-password": "node scripts/set-admin-password.ts",
-    "test:integration": "vitest run --project integration"
+    "test:integration": "vitest run --project integration",
+    "test:load": "vitest run --project load",
+    "load:http": "node scripts/load-http.ts",
+    "export:summary": "node scripts/export-summary.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "2.2.2",

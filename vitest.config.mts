@@ -13,7 +13,7 @@ export default defineConfig({
           name: "unit",
           environment: "node",
           include: ["src/**/*.test.ts", "src/**/*.test.tsx"],
-          exclude: ["src/**/*.int.test.ts"],
+          exclude: ["src/**/*.int.test.ts", "src/**/*.load.test.ts"],
         },
       },
       {
@@ -25,6 +25,18 @@ export default defineConfig({
           globalSetup: ["src/test/integration-global-setup.ts"],
           // Integration tests share one database: run files sequentially.
           fileParallelism: false,
+        },
+      },
+      {
+        resolve: { alias },
+        test: {
+          // Phase 7: many guests at once against the disposable test database.
+          name: "load",
+          environment: "node",
+          include: ["src/**/*.load.test.ts"],
+          globalSetup: ["src/test/integration-global-setup.ts"],
+          fileParallelism: false,
+          testTimeout: 180_000,
         },
       },
     ],
