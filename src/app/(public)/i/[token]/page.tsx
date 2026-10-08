@@ -2,27 +2,38 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Bow } from "@/components/invitation/bow";
+import { InvitationCard } from "@/components/invitation/invitation-card";
 import { Meadow } from "@/components/invitation/meadow";
 import { RsvpForm } from "@/components/invitation/rsvp-form";
 import { WatercolorDefs } from "@/components/invitation/watercolor-defs";
 import { getClientIp } from "@/lib/client-ip";
 import { getDb } from "@/lib/db";
-import { bodyFont, scriptFont } from "@/lib/fonts";
+import { findEvent } from "@/modules/event/repositories/event-repository";
 import { getGuestInvitation } from "@/modules/invitation/services/guest-invitation-service";
 import { submitRsvpAction } from "@/modules/rsvp/services/rsvp-actions";
 
-export const metadata: Metadata = { title: "Invitación" };
+// Decision 34: the link preview shows the baby's name only; never guest names,
+// the date or the address.
+const PREVIEW_DESCRIPTION = "Tenés una invitación 💌";
 
-function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <div
-      className={`${scriptFont.variable} ${bodyFont.variable} bg-paper-edge min-h-dvh px-4 py-6 font-[family-name:var(--font-body)] text-[17px] leading-normal`}
-    >
-      <main className="paper-grain bg-paper relative mx-auto flex max-w-[460px] flex-col items-center gap-7 overflow-hidden px-6 pt-10 text-center *:relative">
-        {children}
-      </main>
-    </div>
-  );
+export async function generateMetadata(): Promise<Metadata> {
+  const event = await findEvent(getDb());
+  const title = event ? `Baby Shower de ${event.babyName}` : "Baby Shower";
+  return {
+    title,
+    description: PREVIEW_DESCRIPTION,
+    openGraph: {
+      title,
+      description: PREVIEW_DESCRIPTION,
+      type: "website",
+      locale: "es_AR",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: PREVIEW_DESCRIPTION,
+    },
+  };
 }
 
 export default async function InvitationPage({
@@ -40,20 +51,20 @@ export default async function InvitationPage({
 
   if (result.status === "event_not_ready") {
     return (
-      <Card>
+      <InvitationCard>
         <WatercolorDefs />
         <Bow untied={false} />
         <p className="pb-10">
           Estamos terminando de preparar esta invitación. Volvé a mirarla en
           unos días.
         </p>
-      </Card>
+      </InvitationCard>
     );
   }
 
   const invitation = result.invitation;
   return (
-    <Card>
+    <InvitationCard>
       <WatercolorDefs />
       <p className="text-[1.05rem] font-semibold text-balance">
         {invitation.guestNamesLabel}
@@ -126,6 +137,6 @@ export default async function InvitationPage({
       />
 
       <Meadow />
-    </Card>
+    </InvitationCard>
   );
 }

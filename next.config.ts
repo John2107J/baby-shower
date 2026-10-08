@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "4.5mb",
     },
   },
+  // Fonts read from disk by the link-preview image must ship with the function.
+  outputFileTracingIncludes: {
+    "/i/[token]/opengraph-image": ["./src/assets/fonts/**"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },

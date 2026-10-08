@@ -307,8 +307,10 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 31 | Tipografías | **Allura** (nombre de la bebé) y **Quicksand** (textos), alojadas en el propio sitio con `next/font`. |
 | 32 | Invitación pública | Diseño aprobado del prototipo: moño en acuarela dibujado en SVG, flores silvestres primaverales, nombres de los invitados arriba. Animaciones: al confirmar "sí" saltan moñitos; al "no" el moño se desata. Mensajes: "¡Qué alegría! Los esperamos." / "😢 Gracias por avisar". |
 | 33 | Lista de regalos en la invitación | El botón "Ver lista de regalos" no se muestra hasta la Fase 5. |
-| 34 | Vista previa (WhatsApp) | Moño de fondo, título "Baby Shower de &lt;nombre de la bebé&gt;" y descripción "Tenés una invitación 💌". Sin nombres de invitados, fecha ni dirección. (PR 4b) |
-| 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero. (PR 4b) |
+| 34 | Vista previa (WhatsApp) | Moño de fondo, título "Baby Shower de &lt;nombre de la bebé&gt;" y descripción "Tenés una invitación 💌". Sin nombres de invitados, fecha ni dirección. La imagen no depende del link (es igual para cualquier token). Solo los bots de vista previa (WhatsApp, Facebook, Telegram, Twitter) pueden leer `/i/` según `robots.txt`; nada se indexa (`X-Robots-Tag: noindex`). |
+| 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero, con la fecha de cada respuesta. |
+| 36 | Página principal | Quien entra sin link ve solo el moño, las flores y "Esta invitación es personal. Usá el link que te enviaron." Sin datos del evento. |
+| 37 | Fuentes en archivos | Para la imagen de vista previa, `Allura` y `Quicksand` están en `src/assets/fonts/` con sus licencias OFL (permiten redistribuirlas). |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

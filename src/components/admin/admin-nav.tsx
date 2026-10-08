@@ -7,6 +7,7 @@ const NAV_ITEMS = [
   { href: ADMIN_ROUTES.event, label: "Evento" },
   { href: ADMIN_ROUTES.gifts, label: "Regalos" },
   { href: ADMIN_ROUTES.invitations, label: "Invitaciones" },
+  { href: ADMIN_ROUTES.confirmations, label: "Confirmaciones" },
 ] as const;
 
 export function AdminNav() {

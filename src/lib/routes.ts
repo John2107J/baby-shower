@@ -8,4 +8,5 @@ export const ADMIN_ROUTES = {
   invitations: "/admin/invitaciones",
   newInvitation: "/admin/invitaciones/nueva",
   editInvitation: (id: string) => `/admin/invitaciones/${id}`,
+  confirmations: "/admin/confirmaciones",
 } as const;
