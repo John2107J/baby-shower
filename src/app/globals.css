@@ -1,1 +1,15 @@
 @import "tailwindcss";
+
+/* Palette sampled from the invitation design chosen by the parents (CLAUDE.md §12.1). */
+@theme {
+  --color-paper: #f9f6f2;
+  --color-ink: #574b44;
+  --color-rose: #b7837f;
+  --color-rose-soft: #e8d3cf;
+  --color-error: #9b2c2c;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
