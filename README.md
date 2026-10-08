@@ -42,6 +42,11 @@ npm run dev                  # http://localhost:3000
 
 GitHub Actions (`.github/workflows/ci.yml`) corre en cada push a `main` y en cada Pull Request: lint, typecheck, formato, tests unitarios, tests de integración (contra un Postgres descartable creado solo para el job) y build. Tiene permisos de solo lectura y no usa secretos.
 
+## Invitación pública
+
+- `/i/<token>`: invitación personal con confirmación de asistencia (1 a 6 personas), editable hasta las 23:59 del día anterior al evento.
+- Un link inválido o una IP bloqueada ven la misma página "no encontrada".
+
 ## Panel de los papás
 
 - `/admin/evento`: datos del evento. `/admin/regalos`: lista de regalos con foto, link de la tienda, precio y cantidad.

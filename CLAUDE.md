@@ -235,7 +235,7 @@ Estas decisiones **no están tomadas**. Presentalas al dueño de a una o en grup
 2. **Cálculo del progreso:** si un regalo tiene cantidad 2 y precio unitario $X, ¿el total a cubrir es 2×X? ¿Cómo se combinan "yo lo llevo" (unidades) con "aporto dinero" (monto) en una misma barra y en el "falta"?
 3. **Aportes sin confirmar:** ¿cuentan para la barra de progreso apenas el invitado los declara, o solo cuando los padres los confirman?
 4. **Si ya se completó un regalo:** ¿se oculta, queda visible como "completo", o se muestra al final?
-5. **RSVP:** ¿máximo de asistentes = cantidad de nombres de la invitación? ¿Hasta qué fecha se puede modificar la respuesta?
+5. ~~**RSVP:**~~ → **Resuelto** (decisiones 28 y 29).
 6. ~~**Panel de padres:**~~ → **Resuelto** (ver sección 12).
 7. ~~**Imágenes de regalos:**~~ → **Resuelto: se suben al sistema y se guardan en Vercel Blob** (ver sección 12).
 8. ~~**Dominio:**~~ → **Resuelto: dominio gratuito de Vercel** (ver sección 12).
@@ -300,7 +300,15 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 24 | Datos de pago | Alias según reglas BCRA (6–20 caracteres: letras, números, `.` y `-`). CBU/CVU de 22 dígitos con verificación de ambos dígitos verificadores. |
 | 25 | Evento único | Fila única con id fijo (upsert atómico): nunca puede haber dos eventos. Las coordenadas GPS no se cargan desde el panel; el botón "Cómo llegar" usa el link de Google Maps. |
 | 26 | Almacenamiento local de fotos | Sin `BLOB_READ_WRITE_TOKEN`, en desarrollo las fotos se guardan en `.dev-uploads/` (ignorado por Git) y se sirven por `/api/dev-uploads`, que en producción responde 404. En producción sin token, falla con error. |
-| 27 | Nombres vs. confirmados | Al editar una invitación no se puede dejar menos nombres que personas ya confirmadas (la base también lo impide). |
+| 27 | ~~Nombres vs. confirmados~~ | **Reemplazada por la 28**: los asistentes ya no dependen de la cantidad de nombres. |
+| 28 | Asistentes | Los elige el invitado: de **1 a 6** por invitación, sin importar cuántos nombres tenga (permite "Familia Pérez"). La base exige coherencia: sin respuesta → sin número; no asiste → 0; asiste → 1 a 6. |
+| 29 | Plazo del RSVP | Se puede responder y cambiar hasta las **23:59 del día anterior** al evento (hora Argentina). Después se **cierra para todos**, incluso para quien nunca respondió, con el mensaje "La confirmación ya cerró. Si necesitás avisar algo, escribile directamente a los papás." |
+| 30 | Límites del público | **20 links inválidos por IP en 10 min** → esa IP ve "no encontrada" durante 10 min (aunque use un link válido). Cada invitación puede **cambiar su respuesta 10 veces cada 10 min**. |
+| 31 | Tipografías | **Allura** (nombre de la bebé) y **Quicksand** (textos), alojadas en el propio sitio con `next/font`. |
+| 32 | Invitación pública | Diseño aprobado del prototipo: moño en acuarela dibujado en SVG, flores silvestres primaverales, nombres de los invitados arriba. Animaciones: al confirmar "sí" saltan moñitos; al "no" el moño se desata. Mensajes: "¡Qué alegría! Los esperamos." / "😢 Gracias por avisar". |
+| 33 | Lista de regalos en la invitación | El botón "Ver lista de regalos" no se muestra hasta la Fase 5. |
+| 34 | Vista previa (WhatsApp) | Moño de fondo, título "Baby Shower de &lt;nombre de la bebé&gt;" y descripción "Tenés una invitación 💌". Sin nombres de invitados, fecha ni dirección. (PR 4b) |
+| 35 | Panel "Confirmaciones" | Vienen (personas e invitaciones), No vienen (invitaciones y nombres), Faltan responder (invitaciones y nombres), y la lista con las pendientes primero. (PR 4b) |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)
@@ -308,5 +316,5 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 - Temática: **moños**. Paleta elegida por los padres; requisito explícito: **que no tenga "aspecto de IA"**.
 - La imagen de referencia **no se sube al repo** (contiene datos reales).
 - Estética: fondo papel crema con textura sutil; nombre de la bebé en caligrafía rosa viejo (protagonista); textos en sans redondeada marrón grisáceo cálido; mayúsculas espaciadas para etiquetas; líneas finas rosadas, pin de ubicación y corazones pequeños como separadores; ilustraciones en acuarela (moño rosa central, flores silvestres con hojas verde salvia).
-- Prohibido: degradados, emojis, tarjetas con sombra, glassmorphism, bordes redondeados por todos lados, tipografías genéricas.
-- Pendiente: origen y licencia de las ilustraciones, tipografías exactas, ubicación de los nombres de invitados, ciudad de la dirección y revisión de textos ("sabes" vs. "sabés").
+- Prohibido: degradados, emojis (excepción pedida por el dueño: "😢 Gracias por avisar" y "💌" en la vista previa), tarjetas con sombra, glassmorphism, bordes redondeados por todos lados, tipografías genéricas.
+- Ilustraciones: diseñadas para el proyecto (SVG y canvas en el código), sin archivos de terceros. Tipografías: decisión 31. Nombres de invitados arriba. Texto de regalos con voseo ("sabés").

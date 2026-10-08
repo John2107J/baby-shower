@@ -23,13 +23,6 @@ export class InvitationHasActivityError extends Error {
   }
 }
 
-export class AttendeesExceedNamesError extends Error {
-  constructor(public readonly attendees: number) {
-    super("Confirmed attendees exceed the number of names");
-    this.name = "AttendeesExceedNamesError";
-  }
-}
-
 const INVITATION_SELECT = {
   id: true,
   token: true,
@@ -91,25 +84,17 @@ export async function createInvitation(
   return row.id;
 }
 
-/**
- * Names can change freely (decision 23), but never below the number of people
- * already confirmed. The row lock stops a concurrent RSVP from slipping in.
- */
+/** Names can change freely; the link stays the same (decision 23). */
 export async function updateInvitationNames(
   db: PrismaClient,
   id: string,
   guestNames: string[],
 ): Promise<void> {
-  await db.$transaction(async (tx) => {
-    const rows = await tx.$queryRaw<{ rsvpAttendeesCount: number | null }[]>`
-      SELECT "rsvpAttendeesCount" FROM "Invitation" WHERE "id" = ${id}::uuid FOR UPDATE`;
-    const current = rows[0];
-    if (!current) throw new InvitationNotFoundError();
-    if ((current.rsvpAttendeesCount ?? 0) > guestNames.length) {
-      throw new AttendeesExceedNamesError(current.rsvpAttendeesCount ?? 0);
-    }
-    await tx.invitation.update({ where: { id }, data: { guestNames } });
+  const result = await db.invitation.updateMany({
+    where: { id },
+    data: { guestNames },
   });
+  if (result.count === 0) throw new InvitationNotFoundError();
 }
 
 export async function replaceInvitationToken(
