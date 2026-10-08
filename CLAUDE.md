@@ -300,6 +300,7 @@ Avanzar **una fase por vez** y pedir aprobación antes de pasar a la siguiente:
 | 24 | Datos de pago | Alias según reglas BCRA (6–20 caracteres: letras, números, `.` y `-`). CBU/CVU de 22 dígitos con verificación de ambos dígitos verificadores. |
 | 25 | Evento único | Fila única con id fijo (upsert atómico): nunca puede haber dos eventos. Las coordenadas GPS no se cargan desde el panel; el botón "Cómo llegar" usa el link de Google Maps. |
 | 26 | Almacenamiento local de fotos | Sin `BLOB_READ_WRITE_TOKEN`, en desarrollo las fotos se guardan en `.dev-uploads/` (ignorado por Git) y se sirven por `/api/dev-uploads`, que en producción responde 404. En producción sin token, falla con error. |
+| 27 | Nombres vs. confirmados | Al editar una invitación no se puede dejar menos nombres que personas ya confirmadas (la base también lo impide). |
 | 8 | Datos del evento | El dueño entregó los **datos reales** del evento. **No se commitean** (repo público): se cargan en la base desde el panel o con un seed local ignorado por Git. |
 
 ### 12.1 Guía de diseño (referencia entregada por los padres)

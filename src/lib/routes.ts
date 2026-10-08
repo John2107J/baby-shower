@@ -5,4 +5,7 @@ export const ADMIN_ROUTES = {
   gifts: "/admin/regalos",
   newGift: "/admin/regalos/nuevo",
   editGift: (id: string) => `/admin/regalos/${id}`,
+  invitations: "/admin/invitaciones",
+  newInvitation: "/admin/invitaciones/nueva",
+  editInvitation: (id: string) => `/admin/invitaciones/${id}`,
 } as const;

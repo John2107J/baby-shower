@@ -10,6 +10,11 @@ export default defineConfig([
       "@typescript-eslint/no-explicit-any": "error",
       "no-console": "error",
       "react/no-danger": "error",
+      // Server actions used with useActionState must accept the previous state even when unused.
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
     },
   },
   {
